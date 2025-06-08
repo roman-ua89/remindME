@@ -1,0 +1,30 @@
+type Query {
+    messages: [Message!]!
+    singleNotes: [SingleNote]!
+}
+
+type Mutation {
+    createMessage(content: String!, author: String!): Message!
+    createSingleNote(term: String!, explanation: String!): SingleNote!
+    createListNote(title: String!, serializedObject: String!): ListNote!
+#    updateListNote(serializedObject: String!): ListNote!
+#    updateListNoteTitle(title: String!): Boolean!
+}
+
+type Message {
+    id: Int!
+    content: String!
+    author: String!
+}
+
+type SingleNote {
+    id: Int!
+    term: String!
+    explanation: String!
+}
+
+type ListNote {
+    id: Int!
+    title: String!
+    serializedObject: String!
+}

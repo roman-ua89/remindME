@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// each model is mapped to a table in DB
+model Message {
+  id      Int     @id @default(autoincrement())
+  content String
+  author  String
+}
+
+model SingleNote {
+  id      Int     @id @default(autoincrement())
+  term    String
+  explanation String
+}
+
+model ListNote {
+  id      Int     @id @default(autoincrement())
+  title   String
+  serializedObject  String
+}
