@@ -6,6 +6,7 @@ Long term project. Started 30.05.22.
 * React 19
 * [Graphql-request](https://www.npmjs.com/package/graphql-request)
 * Typescript
+* Tilewind CSS
 
 ### Server
 * Apollo/server
