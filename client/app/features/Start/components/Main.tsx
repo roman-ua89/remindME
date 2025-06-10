@@ -22,6 +22,7 @@ export const Main = () => {
         <ul>
             {formState?.singleNotes?.map(item => {
                 const { id, term, explanation } = item;
+                console.log('id', id);
                 return (
                     <dl key={id}>
                         <dt>{term}</dt>

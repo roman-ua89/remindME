@@ -3,6 +3,7 @@
 import {BlueButton} from "@/app/shared/UI/Buttons";
 import {ChangeEvent, FormEvent, startTransition, useActionState, useState} from "react";
 import {addSingleNote} from "@/app/features/AddSingleNote/actions";
+import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 
 
 export const Form = () => {
@@ -10,7 +11,7 @@ export const Form = () => {
     const [explanation, setExplanation] = useState('');
     const [state, action] = useActionState(addSingleNote, {
         message: ''
-    })
+    });
 
     const { message } = state;
 
@@ -26,7 +27,7 @@ export const Form = () => {
 
     return (
         <>
-            {message && (<div className="border border-red-800 bg-red-100 p-2 rounded mb-5">Something went wrong</div>)}
+            {message && (<ErrorMsg msg={message} /> )}
             <form onSubmit={handleSubmit}>
                 <div className="flex justify-between gap-10">
                     <div className="grow">

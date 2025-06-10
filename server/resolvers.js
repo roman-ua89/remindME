@@ -31,6 +31,15 @@ export const resolvers = {
       })
       return result;
     },
-    createListNote: async (_, { term, explanation }) => {}
+    createListNote: async (_, { title, serializedObject }) => {
+      const result = await prisma.listNote.create({
+        data: {
+          title,
+          serializedObject
+        }
+      });
+
+      return result;
+    }
   },
 }

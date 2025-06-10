@@ -1,14 +1,14 @@
 'use client';
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {startTransition, useActionState, useCallback, useEffect, useRef, useState} from 'react';
 import './../listNote.module.css';
 import {BlueButton, GreenButton} from "@/app/shared/UI/Buttons";
 import {useSideUpdate } from "@/app/features/AddListNote/hooks";
 import {normalizeList} from "@/app/features/AddListNote/utils";
 import {List} from "@/app/features/AddListNote/components/List";
 import {Edit3} from "@deemlol/next-icons";
-
-
+import {addListNote} from "@/app/features/AddListNote/actions";
+import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 
 export const Form = () => {
     const { state, updateInputValue, addNewRow, removeRow, isDirty } = useSideUpdate([]);
@@ -17,6 +17,10 @@ export const Form = () => {
     const titleInitialValue = useRef<string>('');
     const [showIsSaved, setShowIsSaved] = useState(false);
     const [titleContent, setTitleContent] = useState('Default title');
+    const [listState, listAction] = useActionState(addListNote, {
+        message: ''
+    });
+    const { message } = listState;
     let timeoutId: any = null;
 
     const notifyOnSave = () => {
@@ -51,15 +55,21 @@ export const Form = () => {
         }
     }
 
+    const memoizedNormalizeList = useCallback(normalizeList, [state])
+
     const handleSave = () => {
-        const normalizedData = normalizeList(state);
-        console.log('normalizedData', normalizedData);
-        console.log('title', titleContent);
+        const normalizedData = memoizedNormalizeList(state);
+        startTransition(() => {
+            listAction({
+                title: titleContent,
+                data: normalizedData,
+            });
+        })
     }
 
     return (
         <div>
-
+            {message && (<ErrorMsg msg={message} /> )}
             <div className="mb-4 min-h-10">
                 {editMode ? (
                     <input

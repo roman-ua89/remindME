@@ -17,6 +17,7 @@ export const getList = async (): Promise<Item> => {
   const document = gql`
       query {
           singleNotes {
+              id
               term
               explanation
           }
