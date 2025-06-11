@@ -1,6 +1,6 @@
 'use client';
 
-import { getList } from "@/app/features/Start/actions";
+import { getList } from "@/app/features/RemindSelector/actions";
 import { useActionState, startTransition, useEffect } from "react";
 
 
