@@ -32,3 +32,15 @@ body {
 .h2{
   @apply font-bold text-2xl mb-4;
 }
+
+.item-presentation {
+  @apply rounded border-1 border-solid border-gray-200 p-3 mb-3 shadow-2xs flex items-center justify-between;
+}
+
+.item-type {
+  @apply text-blue-800 font-bold block w-8 h-8 text-center leading-8 border-1 border-blue-200 rounded mr-4;
+}
+
+.item-type-text {
+
+}

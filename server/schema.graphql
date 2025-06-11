@@ -1,6 +1,7 @@
 type Query {
     messages: [Message!]!
     singleNotes: [SingleNote]!
+    listNotes: [ListNote]!
 }
 
 type Mutation {

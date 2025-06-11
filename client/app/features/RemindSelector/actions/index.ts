@@ -2,6 +2,7 @@
 
 import { gql, request } from 'graphql-request'
 import {SERVER_URL} from "@/app/shared/graphql/client";
+import {ListNoteItem} from "@/app/features/AddListNote/types";
 
 interface SingleNote {
     id: number;
@@ -13,13 +14,34 @@ interface Item {
     singleNotes: SingleNote[]
 }
 
-export const getList = async (): Promise<Item> => {
+export const getSingleItems = async (): Promise<Item> => {
   const document = gql`
       query {
           singleNotes {
               id
               term
-              explanation
+          }
+      }
+  `;
+
+    return await request(SERVER_URL, document);
+}
+
+type ListItemReturnType = {
+    id: ListNoteItem["id"];
+    title: string;
+}
+
+export interface GetListItemsReturnType {
+    listNotes: ListItemReturnType[];
+}
+
+export const getListItems = async (): Promise<GetListItemsReturnType> => {
+  const document = gql`
+      query {
+          listNotes {
+              id
+              title
           }
       }
   `;

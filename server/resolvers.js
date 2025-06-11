@@ -10,6 +10,9 @@ export const resolvers = {
     },
     singleNotes: async () => {
       return prisma.singleNote.findMany()
+    },
+    listNotes: async () => {
+      return prisma.listNote.findMany()
     }
   },
   Mutation: {

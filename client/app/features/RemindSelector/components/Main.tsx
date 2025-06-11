@@ -1,35 +1,66 @@
 'use client';
 
-import { getList } from "@/app/features/RemindSelector/actions";
+import { getSingleItems, getListItems } from "@/app/features/RemindSelector/actions";
 import { useActionState, startTransition, useEffect } from "react";
+import {ActionButton} from "@/app/shared/UI/Buttons";
 
 
 export const Main = () => {
-    const [formState, action, isPending] = useActionState(getList, undefined);
+    const [singleFormState, singleAction, singleIsPending] = useActionState(getSingleItems, undefined);
+    const [listFormState, listAction, listIsPending] = useActionState(getListItems, undefined);
 
     useEffect(() => {
         startTransition(() => {
-            action();
+            singleAction();
+            listAction();
         })
     }, []);
 
-
-    if (isPending) {
-        return (<div>Pending...</div>)
-    }
-
     return (
-        <ul>
-            {formState?.singleNotes?.map(item => {
-                const { id, term, explanation } = item;
-                console.log('id', id);
-                return (
-                    <dl key={id}>
-                        <dt>{term}</dt>
-                        <dd>{explanation}</dd>
-                    </dl>
-                )
-            })}
-        </ul>
+        <>
+            <h1 className="h1">Single items</h1>
+            {singleIsPending ? (<div>singleIsPending...</div>) : (
+                <ul className="mb-5">
+                    {singleFormState?.singleNotes?.map(item => {
+                        const { id, term } = item;
+                        console.log('id', id);
+                        return (
+                            <div key={id} className="item-presentation">
+                                <div className="flex items-center">
+                                    <span className="item-type">S</span>
+                                    <span className="item-type-text">{term}</span>
+                                </div>
+                                <div className="flex gap-4">
+                                    <ActionButton label="Play" />
+                                    <ActionButton label="Edit" />
+                                </div>
+                            </div>
+                        )
+                    })}
+                </ul>
+            )}
+
+            <h1 className="h1">List items</h1>
+            {listIsPending ? (<div>singleIsPending...</div>) : (
+                <ul>
+                    {listFormState?.listNotes?.map(item => {
+                        const { id, title } = item;
+                        console.log('id', id);
+                        return (
+                            <div key={id} className="item-presentation">
+                                <div className="flex items-center">
+                                    <span className="item-type">L</span>
+                                    <span className="item-type-text">{title}</span>
+                                </div>
+                                <div className="flex gap-4">
+                                    <ActionButton label="Play" />
+                                    <ActionButton label="Edit" />
+                                </div>
+                            </div>
+                        )
+                    })}
+                </ul>
+            )}
+        </>
     )
 }
