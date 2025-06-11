@@ -2,6 +2,8 @@
 
 * npx prisma migrate dev -> recreate db. And then: npx prisma generate
 
+* prisma migrate deploy -> for production
+
 
 
 

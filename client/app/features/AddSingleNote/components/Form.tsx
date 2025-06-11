@@ -1,19 +1,39 @@
 "use client";
 
 import {BlueButton} from "@/app/shared/UI/Buttons";
-import {ChangeEvent, FormEvent, startTransition, useActionState, useState} from "react";
-import {addSingleNote} from "@/app/features/AddSingleNote/actions";
+import {ChangeEvent, FormEvent, startTransition, useActionState, useEffect, useState} from "react";
+import {addSingleNote, getSingleNoteById} from "@/app/features/AddSingleNote/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 
+type Props = {
+    editMode: boolean;
+    id: string;
+}
 
-export const Form = () => {
+export const Form = ({editMode, id}: Props) => {
     const [term, setTerm] = useState('');
     const [explanation, setExplanation] = useState('');
     const [state, action] = useActionState(addSingleNote, {
         message: ''
     });
-
+    const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined)
     const { message } = state;
+
+    useEffect(() => {
+        if (id) {
+            startTransition(() => {
+                getNoteById(id);
+            })
+        }
+    }, []);
+
+    useEffect(() => {
+        if (stateToEdit && !term && !explanation) {
+            setTerm(stateToEdit.term);
+            setExplanation(stateToEdit.explanation);
+        }
+
+    }, [stateToEdit]);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();

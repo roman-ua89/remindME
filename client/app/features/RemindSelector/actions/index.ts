@@ -4,7 +4,7 @@ import { gql, request } from 'graphql-request'
 import {SERVER_URL} from "@/app/shared/graphql/client";
 import {ListNoteItem} from "@/app/features/AddListNote/types";
 
-interface SingleNote {
+export interface SingleNote {
     id: number;
     term: string;
     explanation: string;
@@ -27,7 +27,7 @@ export const getSingleItems = async (): Promise<Item> => {
     return await request(SERVER_URL, document);
 }
 
-type ListItemReturnType = {
+export type ListItemReturnType = {
     id: ListNoteItem["id"];
     title: string;
 }

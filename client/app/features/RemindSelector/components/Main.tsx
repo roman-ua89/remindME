@@ -1,9 +1,9 @@
 'use client';
 
-import { getSingleItems, getListItems } from "@/app/features/RemindSelector/actions";
+import {getSingleItems, getListItems, SingleNote, ListItemReturnType} from "@/app/features/RemindSelector/actions";
 import { useActionState, startTransition, useEffect } from "react";
 import {ActionButton} from "@/app/shared/UI/Buttons";
-
+import {redirect} from "next/navigation";
 
 export const Main = () => {
     const [singleFormState, singleAction, singleIsPending] = useActionState(getSingleItems, undefined);
@@ -15,6 +15,15 @@ export const Main = () => {
             listAction();
         })
     }, []);
+
+    const editSingleActionHandler = (id: SingleNote["id"]) => {
+        redirect(`/edit/single/${id}`);
+
+    }
+
+    const editListActionHandler = (id: ListItemReturnType["id"]) => {
+        redirect(`/edit/list/${id}`);
+    }
 
     return (
         <>
@@ -31,8 +40,9 @@ export const Main = () => {
                                     <span className="item-type-text">{term}</span>
                                 </div>
                                 <div className="flex gap-4">
+                                    <ActionButton label="View" />
                                     <ActionButton label="Play" />
-                                    <ActionButton label="Edit" />
+                                    <ActionButton label="Edit" action={() => editSingleActionHandler(id)} />
                                 </div>
                             </div>
                         )
@@ -54,7 +64,7 @@ export const Main = () => {
                                 </div>
                                 <div className="flex gap-4">
                                     <ActionButton label="Play" />
-                                    <ActionButton label="Edit" />
+                                    <ActionButton label="Edit" action={() => editListActionHandler(id)} />
                                 </div>
                             </div>
                         )
