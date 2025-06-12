@@ -42,6 +42,18 @@ export const resolvers = {
       })
       return result;
     },
+    updateSingleNote: async (_, { id, term, explanation }) => {
+      const result = await prisma.singleNote.update({
+        where: {
+          id: parseInt(id)
+        },
+        data: {
+          term,
+          explanation
+        }
+      })
+      return result;
+    },
     createListNote: async (_, { title, serializedObject }) => {
       const result = await prisma.listNote.create({
         data: {

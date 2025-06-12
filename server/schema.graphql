@@ -8,6 +8,7 @@ type Query {
 type Mutation {
     createMessage(content: String!, author: String!): Message!
     createSingleNote(term: String!, explanation: String!): SingleNote!
+    updateSingleNote(id: ID!, term: String!, explanation: String!): SingleNote!
     createListNote(title: String!, serializedObject: String!): ListNote!
 #    updateListNote(serializedObject: String!): ListNote!
 #    updateListNoteTitle(title: String!): Boolean!

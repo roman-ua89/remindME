@@ -14,7 +14,7 @@ export default async function EditSinglePage(props: PageProps) {
         <>
             <Header />
             <h1 className="h1">Edit single item with id: {id}</h1>
-            <Form id={id} editMode={true} />
+            <Form id={id} />
         </>
     )
 }

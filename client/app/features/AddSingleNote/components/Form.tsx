@@ -2,20 +2,19 @@
 
 import {BlueButton} from "@/app/shared/UI/Buttons";
 import {ChangeEvent, FormEvent, startTransition, useActionState, useEffect, useState} from "react";
-import {addSingleNote, getSingleNoteById} from "@/app/features/AddSingleNote/actions";
+import {createSingleNote, getSingleNoteById, updateSingleNote} from "@/app/features/AddSingleNote/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 
 type Props = {
-    editMode: boolean;
     id: string;
 }
 
-export const Form = ({editMode, id}: Props) => {
+// if 'id' is defined
+// then we are in edit mode
+export const Form = ({id}: Props) => {
     const [term, setTerm] = useState('');
     const [explanation, setExplanation] = useState('');
-    const [state, action] = useActionState(addSingleNote, {
-        message: ''
-    });
+    const [state, createSingleNoteAction] = useActionState(createSingleNote, { message: '' });
     const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined)
     const { message } = state;
 
@@ -41,7 +40,12 @@ export const Form = ({editMode, id}: Props) => {
             const formData = new FormData();
             formData.append('term', term);
             formData.append('explanation', explanation);
-            action(formData)
+            if (id) {
+                formData.append('id', id);
+                updateSingleNote(formData);
+            } else {
+                createSingleNoteAction(formData)
+            }
         })
     }
 
