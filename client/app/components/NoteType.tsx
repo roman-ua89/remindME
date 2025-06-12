@@ -8,9 +8,9 @@ export const NoteType = () => {
 
     const createAction = (type: createActionTypes) => {
         if (type === 'single_note') {
-            redirect('/add/single/')
+            redirect('/single/add/')
         } else if (type === 'list_note') {
-            redirect('/add/list/')
+            redirect('/list/add/')
         }
     }
 

@@ -6,7 +6,7 @@ import {createSingleNote, getSingleNoteById, updateSingleNote} from "@/app/featu
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 
 type Props = {
-    id: string;
+    id?: string;
 }
 
 // if 'id' is defined
