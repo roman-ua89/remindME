@@ -25,6 +25,10 @@ export const Main = () => {
         redirect(`/edit/list/${id}`);
     }
 
+    const playSingleNoteHandler = (id: SingleNote["id"]) => {
+        redirect(`/play/single/${id}`);
+    }
+
     return (
         <>
             <h1 className="h1">Single items</h1>
@@ -41,7 +45,7 @@ export const Main = () => {
                                 </div>
                                 <div className="flex gap-4">
                                     <ActionButton label="View" />
-                                    <ActionButton label="Play" />
+                                    <ActionButton label="Play" action={() => playSingleNoteHandler(id)} />
                                     <ActionButton label="Edit" action={() => editSingleActionHandler(id)} />
                                 </div>
                             </div>
