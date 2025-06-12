@@ -2,7 +2,8 @@
 
 import {BlueButton} from "@/app/shared/UI/Buttons";
 import {ChangeEvent, FormEvent, startTransition, useActionState, useEffect, useState} from "react";
-import {createSingleNote, getSingleNoteById, updateSingleNote} from "@/app/features/AddSingleNote/actions";
+import {createSingleNote, updateSingleNote} from "@/app/features/AddSingleNote/actions";
+import { getSingleNoteById } from "@/app/shared/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 
 type Props = {

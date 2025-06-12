@@ -22,11 +22,11 @@ export const Main = () => {
     }
 
     const editListActionHandler = (id: ListItemReturnType["id"]) => {
-        redirect(`/edit/list/${id}`);
+        redirect(`/list/edit/${id}`);
     }
 
     const playSingleNoteHandler = (id: SingleNote["id"]) => {
-        redirect(`/play/single/${id}`);
+        redirect(`/single/play/${id}`);
     }
 
     return (

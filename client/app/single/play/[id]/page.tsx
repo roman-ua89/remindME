@@ -12,7 +12,6 @@ export default async function PlayPage({params}: PageProps) {
 
     return (
         <div>
-
             <Header />
             <Play id={id} />
         </div>
