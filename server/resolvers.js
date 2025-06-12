@@ -12,8 +12,14 @@ export const resolvers = {
       return prisma.singleNote.findMany()
     },
     singleNoteById: async (_root, { id }) => {
-      console.log('singleNoteById', id);
       return prisma.singleNote.findUnique({
+        where: {
+          id: parseInt(id)
+        }
+      })
+    },
+    listNoteById: async (_root, { id }) => {
+      return prisma.listNote.findUnique({
         where: {
           id: parseInt(id)
         }

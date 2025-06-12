@@ -2,6 +2,7 @@ type Query {
     messages: [Message!]!
     singleNotes: [SingleNote]!
     singleNoteById(id: ID!): SingleNote
+    listNoteById(id: ID!): ListNote
     listNotes: [ListNote]!
 }
 

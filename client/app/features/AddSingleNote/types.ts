@@ -8,3 +8,13 @@ export interface ISingleNote {
 export interface ISingleNoteResponse {
     singleNoteById: ISingleNote;
 }
+
+export interface IListNote {
+    id: number;
+    title: string;
+    serializedObject: string;
+}
+
+export interface IListNoteResponse {
+    listNoteById: IListNote;
+}

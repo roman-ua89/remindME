@@ -7,7 +7,6 @@ import {getSingleNoteById} from "@/app/shared/actions";
 
 export const Play = ({id}: {id:string}) => {
     const [singleNoteState, singleNoteAction] = useActionState(getSingleNoteById, undefined);
-    const explanationRef = useRef<HTMLDivElement>(null);
 
     const closeHandler = () => {
         redirect('/');
@@ -41,7 +40,7 @@ export const Play = ({id}: {id:string}) => {
             </div>
             <div className="border-5 border-gray-100 rounded-2xl p-4 flex justify-between gap-4 mb-5">
                 <div className="bg-gray-50 p-4 w-60">{singleNoteState?.term}</div>
-                <div className="bg-gray-50 p-4 grow blur-xs cursor-pointer" onClick={unblur} ref={explanationRef}>{singleNoteState?.explanation}</div>
+                <div className="bg-gray-50 p-4 grow blur-xs cursor-pointer" onClick={unblur}>{singleNoteState?.explanation}</div>
             </div>
             <div className="flex justify-between">
                 <GreenButton label="Aknowledged" />

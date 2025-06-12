@@ -7,7 +7,7 @@ interface PageProps {
     }>;
 }
 
-export default async function PlayPage({params}: PageProps) {
+export default async function PlaySinglePage({params}: PageProps) {
     const { id } = await params;
 
     return (
