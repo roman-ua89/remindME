@@ -4,6 +4,7 @@ import {getSingleItems, getListItems, SingleNote, ListItemReturnType} from "@/ap
 import { useActionState, startTransition, useEffect } from "react";
 import {ActionButton} from "@/app/shared/UI/Buttons";
 import {redirect} from "next/navigation";
+import {ListNoteItem} from "@/app/features/AddListNote/types";
 
 export const Main = () => {
     const [singleFormState, singleAction, singleIsPending] = useActionState(getSingleItems, undefined);
@@ -21,8 +22,12 @@ export const Main = () => {
 
     }
 
-    const editListActionHandler = (id: ListItemReturnType["id"]) => {
+    const editListActionHandler = (id: ListNoteItem["id"]) => {
         redirect(`/list/edit/${id}`);
+    }
+
+    const playListActionHandler = (id: ListNoteItem["id"]) => {
+        redirect(`/list/play/${id}`);
     }
 
     const playSingleNoteHandler = (id: SingleNote["id"]) => {
@@ -67,7 +72,7 @@ export const Main = () => {
                                     <span className="item-type-text">{title}</span>
                                 </div>
                                 <div className="flex gap-4">
-                                    <ActionButton label="Play" />
+                                    <ActionButton label="Play" action={() => playListActionHandler(id)} />
                                     <ActionButton label="Edit" action={() => editListActionHandler(id)} />
                                 </div>
                             </div>

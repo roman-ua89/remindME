@@ -35,7 +35,7 @@ export const GreenButton = ({ action, label, disabled }: Props) => {
 export const ActionButton = ({ action, label, disabled }: Props) => {
     return (
         <button
-            className="bg-gray-100 text-gray-600 bold text-sm px-2 py-1 rounded hover:bg-gray-200 cursor-pointer"
+            className="border-gray-200 border-1 bg-gray-100 text-gray-600 bold text-sm px-2 py-1 rounded hover:bg-gray-200 cursor-pointer"
             disabled={disabled}
             onClick={action ? () => action() : undefined}
         >{label}</button>
