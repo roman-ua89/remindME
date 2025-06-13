@@ -70,5 +70,5 @@ export const useSideUpdate = (defaultState: ListNoteItem[]) => {
         setIsDirty(true);
     }
 
-    return { state, updateInputValue, addNewRow, removeRow, isDirty };
+    return { state, setState, updateInputValue, addNewRow, removeRow, isDirty };
 }

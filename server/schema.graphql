@@ -12,7 +12,7 @@ type Mutation {
     updateSingleNote(id: ID!, term: String!, explanation: String!): SingleNote!
     createListNote(title: String!, serializedObject: String!): ListNote!
 #    updateListNote(serializedObject: String!): ListNote!
-#    updateListNoteTitle(title: String!): Boolean!
+    updateListNoteTitle(id: ID!, title: String!): ListNote!
 }
 
 type Message {

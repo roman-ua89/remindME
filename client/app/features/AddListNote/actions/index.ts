@@ -1,6 +1,6 @@
 'use server';
 
-import {ListNoteItem, SavedListNoteResponse} from "@/app/features/AddListNote/types";
+import {IListNoteResponse, ListNoteItem, SavedListNoteResponse} from "@/app/features/AddListNote/types";
 import {gql, request} from "graphql-request";
 import { SERVER_URL } from "@/app/shared/graphql/client";
 import {revalidatePath} from "next/cache";
@@ -16,7 +16,7 @@ export const addListNote = async (state: { message: string }, dataToSave: AddLis
 
     const document = gql`
         mutation createListNote($title: String!, $serializedObject: String!) {
-            createListNote(title: $title, serializedObject: $serializedObject) {
+            listNote(title: $title, serializedObject: $serializedObject) {
                 id
                 title
                 serializedObject
@@ -40,6 +40,34 @@ export const addListNote = async (state: { message: string }, dataToSave: AddLis
 
     revalidatePath('/');
     redirect('/');
+}
 
+type UpdateListNoteTitleProps = {
+    id: ListNoteItem['id'];
+    title: string;
+}
+
+export const updateListNoteTitle = async (_:any, {id, title}: UpdateListNoteTitleProps) => {
+
+    const document = gql`
+        mutation updateListNoteTitle($id: Int!, $title: String!) {
+            updateListNoteTitle(id: $id, title: $title) {
+                id
+                title
+                serializedObject
+            }
+        }
+    `;
+
+    try {
+        const { listNoteItem } = await request<IListNoteResponse>(SERVER_URL, document, {
+            id,
+            title
+        });
+        console.log('update listNoteItem', listNoteItem);
+        return listNoteItem;
+    } catch (e) {
+        console.log('update listNoteItem', e);
+    }
 
 }

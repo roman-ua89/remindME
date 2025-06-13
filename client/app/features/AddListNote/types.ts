@@ -17,5 +17,17 @@ interface ServerListNote {
 }
 
 export interface SavedListNoteResponse {
-    createListNote: ServerListNote;
+    ListNote: ServerListNote;
+}
+
+// -------------how should be
+
+export interface IListNoteItem {
+    id: number;
+    title: string;
+    serializedObject: string;
+}
+
+export interface IListNoteResponse {
+    listNoteItem: IListNoteItem;
 }

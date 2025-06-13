@@ -7,12 +7,18 @@ import {useSideUpdate } from "@/app/features/AddListNote/hooks";
 import {normalizeList} from "@/app/features/AddListNote/utils";
 import {List} from "@/app/features/AddListNote/components/List";
 import {Edit3} from "@deemlol/next-icons";
-import {addListNote} from "@/app/features/AddListNote/actions";
+import {addListNote, updateListNoteTitle} from "@/app/features/AddListNote/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
+import {getListNoteById} from "@/app/shared/actions";
 
-export const Form = () => {
-    const { state, updateInputValue, addNewRow, removeRow, isDirty } = useSideUpdate([]);
-    const [editMode, setEditMode] = useState(false);
+type Props = {
+    id?: string;
+}
+
+export const Form = ({id}: Props) => {
+    const [stateToEdit, getListNoteAction] = useActionState(getListNoteById, undefined);
+    const { state, setState, updateInputValue, addNewRow, removeRow, isDirty } = useSideUpdate([]);
+    const [titleEditMode, setTitleEditMode] = useState(false);
     const titleInputRef = useRef<HTMLInputElement>(null);
     const titleInitialValue = useRef<string>('');
     const [showIsSaved, setShowIsSaved] = useState(false);
@@ -20,8 +26,11 @@ export const Form = () => {
     const [listState, listAction] = useActionState(addListNote, {
         message: ''
     });
+    const [updateTitleState, updateTitleAction] = useActionState(updateListNoteTitle, undefined);
     const { message } = listState;
     let timeoutId: any = null;
+
+    console.log('updateTitleState', updateTitleState);
 
     const notifyOnSave = () => {
         clearTimeout(timeoutId);
@@ -32,28 +41,46 @@ export const Form = () => {
     }
 
     useEffect(() => {
-        if (editMode) {
+        if (id) {
+            startTransition(() => {
+                getListNoteAction(id);
+            })
+        }
+    }, []);
+
+    useEffect(() => {
+        if (stateToEdit) {
+            const { title, serializedObject } = stateToEdit;
+            setTitleContent(title);
+            titleInitialValue.current = title;
+            setState(JSON.parse(serializedObject));
+        }
+    }, [stateToEdit]);
+
+    useEffect(() => {
+        if (titleEditMode) {
             titleInputRef?.current?.focus();
         }
-    }, [editMode])
+    }, [titleEditMode])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') setEditMode(false);
+        if (e.key === 'Enter') setTitleEditMode(false);
     }
 
     const handleOnBlur = () => {
-        setEditMode(false);
+        setTitleEditMode(false);
     }
 
-    const saveData = () => {
-        if (titleInitialValue.current !== titleContent) {
-            titleInitialValue.current = titleContent;
-            console.log('save title: ', titleContent);
-            notifyOnSave();
-        } else {
-            console.log('title was not changed')
+    useEffect(() => {
+        // console.log('titleContent', titleContent);
+        // console.log('titleInitialValue.current', titleInitialValue.current);
+        if (!titleEditMode && titleContent !== titleInitialValue.current && titleInitialValue.current && id) {
+            console.log('save title');
+            startTransition(() => {
+                updateTitleAction({ id: parseInt(id), title: titleContent });
+            })
         }
-    }
+    }, [titleEditMode]);
 
     const memoizedNormalizeList = useCallback(normalizeList, [state])
 
@@ -71,7 +98,7 @@ export const Form = () => {
         <div>
             {message && (<ErrorMsg msg={message} /> )}
             <div className="mb-4 min-h-10">
-                {editMode ? (
+                {titleEditMode ? (
                     <input
                         value={titleContent}
                         ref={titleInputRef}
@@ -81,7 +108,7 @@ export const Form = () => {
                         onKeyDown={handleKeyDown} />
                 ) : (
                     <div className="flex items-start">
-                        <h2 className="h2 cursor-pointer group hover:text-inherit flex items-baseline mb-0!" onClick={() => setEditMode(true)}>
+                        <h2 className="h2 cursor-pointer group hover:text-inherit flex items-baseline mb-0!" onClick={() => setTitleEditMode(true)}>
                         <span className="text-gray-400 pr-2 group-hover:text-gray-500">
                             <Edit3 size={16}/>
                         </span>
