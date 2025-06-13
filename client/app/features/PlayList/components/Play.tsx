@@ -2,7 +2,7 @@
 
 import {ActionButton} from "@/app/shared/UI/Buttons";
 import {PlayProgressBar} from "@/app/shared/UI/PlayProgressBar";
-import {useActionState, useEffect, useTransition, useState, MouseEvent} from "react";
+import {useActionState, useEffect, useTransition, useState} from "react";
 import {getListNoteById} from "@/app/shared/actions";
 import {ListNoteItem} from "@/app/features/AddListNote/types";
 
@@ -15,6 +15,7 @@ export const Play = ({id}: Props) => {
     const [isPending, startTransition] = useTransition();
     const [listNotes, setListNotes] = useState<ListNoteItem[]>([]);
     const [currentStep, setCurrentStep] = useState(0);
+    const [unblurredItems, setUnblurredItems] = useState<number[]>([]);
 
     useEffect(() => {
         startTransition(() => {
@@ -29,8 +30,6 @@ export const Play = ({id}: Props) => {
         }
     }, [listNoteState]);
 
-    console.log('listNotes', listNotes)
-
     const prevAction = () => {
         setCurrentStep(currentStep - 1);
     }
@@ -39,16 +38,21 @@ export const Play = ({id}: Props) => {
         setCurrentStep(currentStep + 1);
     }
 
-    const unblur = (e: MouseEvent<HTMLDivElement>) => {
-        console.log('e', e);
-        const el = e.target as HTMLElement;
-        if (el.classList.contains('blur-xs')) {
-            el.classList.remove('blur-xs', 'cursor-pointer');
+    const unblurById = (id?: number) => {
+        if (id && !unblurredItems.includes(id)) {
+            setUnblurredItems(prev => [...prev, id]);
         }
     }
 
     if (isPending && !listNotes.length) {
         return (<div>is loading ...</div>)
+    }
+
+    const isBlurred = (id?: number): string => {
+        if (id && unblurredItems.includes(id)) {
+            return '';
+        }
+        return 'blur-xs cursor-pointer';
     }
 
     return (
@@ -58,7 +62,7 @@ export const Play = ({id}: Props) => {
                 <ActionButton label="Prev" disabled={!currentStep} action={prevAction} />
                 <dl className="flex justify-between gap-4 grow">
                     <dt className="bg-gray-50 p-4 w-60">{listNotes[currentStep]?.left}</dt>
-                    <dd className="bg-gray-50 p-4 grow blur-xs cursor-pointer" onClick={unblur}>{listNotes[currentStep]?.right}</dd>
+                    <dd className={`bg-gray-50 p-4 grow ${isBlurred(listNotes[currentStep]?.id)}`} onClick={() => unblurById(listNotes[currentStep]?.id)}>{listNotes[currentStep]?.right}</dd>
                 </dl>
                 <ActionButton label="Next" action={nextAction} disabled={currentStep === listNotes.length - 1}/>
             </div>
