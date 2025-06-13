@@ -1,5 +1,5 @@
 import {Header} from "@/app/components/Header";
-import {Form} from "@/app/features/AddSingleNote";
+import {Form} from "../../../features/SingleNote";
 
 interface PageProps {
     params: Promise<{

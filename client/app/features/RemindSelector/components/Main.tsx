@@ -4,7 +4,7 @@ import {getSingleItems, getListItems, SingleNote, ListItemReturnType} from "@/ap
 import { useActionState, startTransition, useEffect } from "react";
 import {ActionButton} from "@/app/shared/UI/Buttons";
 import {redirect} from "next/navigation";
-import {ListNoteItem} from "@/app/features/AddListNote/types";
+import {ListNoteItem} from "@/app/features/ListNote/types";
 
 export const Main = () => {
     const [singleFormState, singleAction, singleIsPending] = useActionState(getSingleItems, undefined);

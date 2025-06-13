@@ -1,4 +1,4 @@
-import {ListNoteItem} from "@/app/features/AddListNote/types";
+import {ListNoteItem} from "@/app/features/ListNote/types";
 
 export const normalizeList = (list: ListNoteItem[]) => {
     return list.filter(listItem => {

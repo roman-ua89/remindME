@@ -2,7 +2,7 @@
 
 import { gql, request } from 'graphql-request'
 import {SERVER_URL} from "@/app/shared/graphql/client";
-import {ListNoteItem} from "@/app/features/AddListNote/types";
+import {ListNoteItem} from "@/app/features/ListNote/types";
 
 export interface SingleNote {
     id: number;

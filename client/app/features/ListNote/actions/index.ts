@@ -1,6 +1,6 @@
 'use server';
 
-import {IListNoteResponse, ListNoteItem, SavedListNoteResponse} from "@/app/features/AddListNote/types";
+import {IListNoteResponse, ListNoteItem, SavedListNoteResponse} from "@/app/features/ListNote/types";
 import {gql, request} from "graphql-request";
 import { SERVER_URL } from "@/app/shared/graphql/client";
 import {revalidatePath} from "next/cache";

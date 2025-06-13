@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from "react";
 import {RedButton} from "@/app/shared/UI/Buttons";
-import {Side} from "@/app/features/AddListNote/hooks";
-import {ListNoteItem} from "@/app/features/AddListNote/types";
+import {Side} from "@/app/features/ListNote/hooks";
+import {ListNoteItem} from "@/app/features/ListNote/types";
 
 type Props = {
     updateInputValue: ({ value, id, side }: { value: string, id: number, side: Side }) => void;

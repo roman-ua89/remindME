@@ -1,5 +1,5 @@
 import {Header} from "@/app/components/Header";
-import {Form} from "../../features/AddSingleNote";
+import {Form} from "../../features/SingleNote";
 
 export default function Single() {
 

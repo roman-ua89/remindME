@@ -4,7 +4,7 @@ import {ActionButton, GreenButton} from "@/app/shared/UI/Buttons";
 import {PlayProgressBar} from "@/app/shared/UI/PlayProgressBar";
 import {useActionState, useEffect, useTransition, useState} from "react";
 import {getListNoteById} from "@/app/shared/actions";
-import {ListNoteItem} from "@/app/features/AddListNote/types";
+import {ListNoteItem} from "@/app/features/ListNote/types";
 
 type Props = {
     id: string;

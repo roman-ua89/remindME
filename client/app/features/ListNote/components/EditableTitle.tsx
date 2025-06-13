@@ -1,6 +1,6 @@
 import {Edit3} from "@deemlol/next-icons";
 import React, {useEffect, useRef, useState} from "react";
-import {ServerData} from "@/app/features/AddListNote/types";
+import {ServerData} from "@/app/features/ListNote/types";
 
 type Props = {
     title: ServerData["title"];

@@ -1,5 +1,5 @@
 import {gql, request} from "graphql-request";
-import {IListNoteResponse, ISingleNoteResponse} from "@/app/features/AddSingleNote/types";
+import {IListNoteResponse, ISingleNoteResponse} from "@/app/features/SingleNote/types";
 import {SERVER_URL} from "@/app/shared/graphql/client";
 
 export const getSingleNoteById = async (_: any, id: string) => {

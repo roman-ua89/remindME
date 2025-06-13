@@ -1,5 +1,5 @@
 import {ChangeEvent, useEffect, useRef, useState} from "react";
-import {ListNoteItem} from "@/app/features/AddListNote/types";
+import {ListNoteItem} from "@/app/features/ListNote/types";
 
 export type Side = 'left' | 'right' | 'title';
 

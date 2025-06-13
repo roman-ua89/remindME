@@ -4,7 +4,7 @@ import { gql, request } from 'graphql-request'
 import {SERVER_URL} from "@/app/shared/graphql/client";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
-import {ISingleNoteResponse} from "@/app/features/AddSingleNote/types";
+import {ISingleNoteResponse} from "@/app/features/SingleNote/types";
 
 export const createSingleNote = async (state: { message: string }, formData: FormData) => {
     const term = formData.get('term');

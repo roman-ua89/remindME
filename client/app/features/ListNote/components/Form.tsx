@@ -3,11 +3,11 @@
 import React, {startTransition, useActionState, useCallback, useEffect, useRef, useState} from 'react';
 import './../listNote.module.css';
 import {BlueButton, GreenButton} from "@/app/shared/UI/Buttons";
-import {useSideUpdate } from "@/app/features/AddListNote/hooks";
-import {normalizeList} from "@/app/features/AddListNote/utils";
-import {List} from "@/app/features/AddListNote/components/List";
+import {useSideUpdate } from "@/app/features/ListNote/hooks";
+import {normalizeList} from "@/app/features/ListNote/utils";
+import {List} from "@/app/features/ListNote/components/List";
 import {Edit3} from "@deemlol/next-icons";
-import {addListNote, updateListNoteTitle} from "@/app/features/AddListNote/actions";
+import {addListNote, updateListNoteTitle} from "@/app/features/ListNote/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 import {getListNoteById} from "@/app/shared/actions";
 

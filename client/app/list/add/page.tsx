@@ -1,5 +1,5 @@
 import {Header} from "@/app/components/Header";
-import {Form} from "@/app/features/AddListNote";
+import {Form} from "../../features/ListNote";
 
 export default function List() {
 
