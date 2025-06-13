@@ -1,6 +1,6 @@
 'use client';
 
-import {ActionButton} from "@/app/shared/UI/Buttons";
+import {ActionButton, GreenButton} from "@/app/shared/UI/Buttons";
 import {PlayProgressBar} from "@/app/shared/UI/PlayProgressBar";
 import {useActionState, useEffect, useTransition, useState} from "react";
 import {getListNoteById} from "@/app/shared/actions";
@@ -16,6 +16,7 @@ export const Play = ({id}: Props) => {
     const [listNotes, setListNotes] = useState<ListNoteItem[]>([]);
     const [currentStep, setCurrentStep] = useState(0);
     const [unblurredItems, setUnblurredItems] = useState<number[]>([]);
+    const [canGoNext, setCanGoNext] = useState(false);
 
     useEffect(() => {
         startTransition(() => {
@@ -35,7 +36,12 @@ export const Play = ({id}: Props) => {
     }
 
     const nextAction = () => {
-        setCurrentStep(currentStep + 1);
+        setCurrentStep(prevValue => {
+            if (prevValue + 1 === listNotes.length - 1) {
+                setCanGoNext(true);
+            }
+            return prevValue + 1;
+        });
     }
 
     const unblurById = (id?: number) => {
@@ -66,9 +72,14 @@ export const Play = ({id}: Props) => {
                 </dl>
                 <ActionButton label="Next" action={nextAction} disabled={currentStep === listNotes.length - 1}/>
             </div>
-            <div>
+            <div className="mb-5">
                 <PlayProgressBar percentage={Math.ceil((currentStep / (listNotes.length - 1)) * 100)} />
             </div>
+            {canGoNext && (
+                <div>
+                    <GreenButton label="Aknowledge and go next" />
+                </div>
+            )}
         </>
     )
 }
