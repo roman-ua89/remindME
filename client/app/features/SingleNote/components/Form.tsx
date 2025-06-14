@@ -1,10 +1,12 @@
 "use client";
 
 import {BlueButton} from "@/app/shared/UI/Buttons";
-import {ChangeEvent, FormEvent, startTransition, useActionState, useEffect, useState} from "react";
+import {ChangeEvent, FormEvent, startTransition, useActionState, useEffect} from "react";
 import {createSingleNote, updateSingleNote} from "@/app/features/SingleNote/actions";
 import { getSingleNoteById } from "@/app/shared/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {setTerm, setExplanation} from "@/store/features/singleNote/singleNoteSlice";
 
 type Props = {
     id?: string;
@@ -13,8 +15,11 @@ type Props = {
 // if 'id' is defined
 // then we are in edit mode
 export const Form = ({id}: Props) => {
-    const [term, setTerm] = useState('');
-    const [explanation, setExplanation] = useState('');
+    const dispatch = useAppDispatch();
+
+    const term = useAppSelector(state => state.singleNote.term);
+    const explanation = useAppSelector(state => state.singleNote.explanation);
+
     const [state, createSingleNoteAction] = useActionState(createSingleNote, { message: '' });
     const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined)
     const { message } = state;
@@ -29,8 +34,8 @@ export const Form = ({id}: Props) => {
 
     useEffect(() => {
         if (stateToEdit && !term && !explanation) {
-            setTerm(stateToEdit.term);
-            setExplanation(stateToEdit.explanation);
+            dispatch(setTerm(stateToEdit.term));
+            dispatch(setExplanation(stateToEdit.explanation));
         }
 
     }, [stateToEdit]);
@@ -45,7 +50,7 @@ export const Form = ({id}: Props) => {
                 formData.append('id', id);
                 updateSingleNote(formData);
             } else {
-                createSingleNoteAction(formData)
+                createSingleNoteAction(formData);
             }
         })
     }
@@ -60,7 +65,7 @@ export const Form = ({id}: Props) => {
                             <h2>Terminology</h2>
                             <input
                                 name="term"
-                                onInput={(e: ChangeEvent<HTMLInputElement>) => setTerm(e.target.value)}
+                                onInput={(e: ChangeEvent<HTMLInputElement>) => dispatch(setTerm(e.target.value))}
                                 value={term}
                                 className="border-solid border-stone-200 border-2 h-8 w-[100%] block p-2" />
                         </div>
@@ -70,7 +75,7 @@ export const Form = ({id}: Props) => {
                         <textarea
                             name="explanation"
                             value={explanation}
-                            onInput={(e: ChangeEvent<HTMLTextAreaElement>) => setExplanation(e.target.value)}
+                            onInput={(e: ChangeEvent<HTMLTextAreaElement>) => dispatch(setExplanation(e.target.value))}
                             className="border-stone-200 border-solid block border-2 resize-none w-[100%] p-2 min-h-30" />
                     </div>
                 </div>

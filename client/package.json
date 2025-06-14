@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@deemlol/next-icons": "^0.1.9",
+    "@reduxjs/toolkit": "^2.8.2",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
