@@ -21,7 +21,7 @@ export const Form = ({id}: Props) => {
     const explanation = useAppSelector(state => state.singleNote.explanation);
 
     const [state, createSingleNoteAction] = useActionState(createSingleNote, { message: '' });
-    const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined)
+    const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined);
     const { message } = state;
 
     useEffect(() => {

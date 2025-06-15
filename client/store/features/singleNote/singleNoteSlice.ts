@@ -2,13 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface SingleNoteState {
-    value: number,
     term: string,
     explanation: string,
 }
 
 const initialState: SingleNoteState = {
-    value: 5,
     term: '',
     explanation: ''
 }

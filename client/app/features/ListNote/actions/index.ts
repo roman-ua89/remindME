@@ -1,10 +1,18 @@
 'use server';
 
-import {IListNoteResponse, ListNoteItem, SavedListNoteResponse} from "@/app/features/ListNote/types";
+import {
+    CreatedListNoteResponse,
+    IListNoteItem,
+    IListNoteResponse,
+    ListNoteItem,
+    SavedListNoteResponse,
+    UpdatedListNoteResponse
+} from "@/app/features/ListNote/types";
 import {gql, request} from "graphql-request";
 import { SERVER_URL } from "@/app/shared/graphql/client";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
+import {IListNote} from "@/app/features/SingleNote/types";
 
 export type AddListNoteProps = {
     title: string;
@@ -26,7 +34,7 @@ export const addListNote = async (state: { message: string }, dataToSave: AddLis
 
     try {
         const stringifiedData = JSON.stringify(data);
-        const addListNoteResult = await request<SavedListNoteResponse>(SERVER_URL, document, {
+        const addListNoteResult = await request<CreatedListNoteResponse>(SERVER_URL, document, {
             title,
             serializedObject: stringifiedData
         })
@@ -40,6 +48,42 @@ export const addListNote = async (state: { message: string }, dataToSave: AddLis
 
     revalidatePath('/');
     redirect('/');
+}
+
+export type UpdateListNoteProps = {
+    id: IListNote["id"];
+    data: IListNote["serializedObject"];
+}
+
+type ErrorMsg = { message: string };
+
+export type UpdateListNoteReturnType = ErrorMsg | IListNoteItem;
+
+export const updateListNote = async (_: any, dataToSave: UpdateListNoteProps) => {
+    const { id, data } = dataToSave;
+
+    const document = gql`
+      mutation updateListNote($id: ID!, $serializedObject: String!) {
+          updateListNote(id: $id, serializedObject: $serializedObject) {
+              id
+              title
+              serializedObject
+          }
+      }
+    `;
+
+    try {
+        const updateResult = await request<UpdatedListNoteResponse>(SERVER_URL, document, {
+            id,
+            serializedObject: data
+        })
+        const { updateListNote } = updateResult;
+        return updateListNote;
+    } catch (e) {
+        return {
+            message: 'updateListNote action | something went wrong' + e
+        }
+    }
 }
 
 type UpdateListNoteTitleProps = {

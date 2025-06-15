@@ -9,3 +9,5 @@ export const normalizeList = (list: ListNoteItem[]) => {
         return true;
     })
 }
+
+

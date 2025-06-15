@@ -70,6 +70,17 @@ export const resolvers = {
 
       return result;
     },
+    updateListNote: async (_, { id, serializedObject }) => {
+      const result = prisma.listNote.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: {
+          serializedObject
+        }
+      })
+      return result;
+    },
     updateListNoteTitle: async (_, { id, title }) => {
       const result = await prisma.listNote.update({
         where: {

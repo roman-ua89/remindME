@@ -1,19 +1,21 @@
+'use client';
+
 import React, {ChangeEvent} from "react";
 import {RedButton} from "@/app/shared/UI/Buttons";
-import {Side} from "@/app/features/ListNote/hooks";
 import {ListNoteItem} from "@/app/features/ListNote/types";
+import {useAppDispatch} from "@/store/hooks";
+import {deleteRow, updateLeft, updateRight} from "@/store/features/listNote/listNoteSlice";
 
 type Props = {
-    updateInputValue: ({ value, id, side }: { value: string, id: number, side: Side }) => void;
-    removeRow: (id: ListNoteItem["id"]) => void;
-    state: ListNoteItem[];
+    list: ListNoteItem[];
 }
 
-export const List = ({ updateInputValue, removeRow, state }: Props) => {
+export const List = ({ list }: Props) => {
+    const dispatch = useAppDispatch();
 
     return (
         <ul>
-            {state.map((item, index) => {
+            {list.map((item, index) => {
                 const {left, right, id} = item;
 
                 return (
@@ -22,19 +24,19 @@ export const List = ({ updateInputValue, removeRow, state }: Props) => {
                         <div>
                             <input
                                 type="text"
-                                onInput={(e: ChangeEvent<HTMLInputElement>) => updateInputValue({ value: e.target.value, id, side: 'left' })}
+                                onInput={(e: ChangeEvent<HTMLInputElement>) => dispatch(updateLeft({ value: e.target.value, id }))}
                                 value={left}
                                 className="border-solid border-stone-200 border-2 h-8 w-[100%] block p-2" />
                         </div>
                         <div>
                             <input
                                 type="text"
-                                onInput={(e: ChangeEvent<HTMLInputElement>) => updateInputValue({ value: e.target.value, id, side: 'right' })}
+                                onInput={(e: ChangeEvent<HTMLInputElement>) => dispatch(updateRight({ value: e.target.value, id }))}
                                 value={right}
                                 className="border-solid border-stone-200 border-2 h-8 w-[100%] block p-2" />
                         </div>
-                        {state.length > 1 ? (
-                            <RedButton label="Delete" action={() => removeRow(id)} />
+                        {list.length > 1 ? (
+                            <RedButton label="Delete" action={() => dispatch(deleteRow({ id }))} />
                         ) : null}
 
                     </li>

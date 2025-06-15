@@ -3,34 +3,40 @@
 import React, {startTransition, useActionState, useCallback, useEffect, useRef, useState} from 'react';
 import './../listNote.module.css';
 import {BlueButton, GreenButton} from "@/app/shared/UI/Buttons";
-import {useSideUpdate } from "@/app/features/ListNote/hooks";
 import {normalizeList} from "@/app/features/ListNote/utils";
 import {List} from "@/app/features/ListNote/components/List";
 import {Edit3} from "@deemlol/next-icons";
-import {addListNote, updateListNoteTitle} from "@/app/features/ListNote/actions";
+import {addListNote, updateListNote, UpdateListNoteProps, updateListNoteTitle} from "@/app/features/ListNote/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 import {getListNoteById} from "@/app/shared/actions";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {createNewRow, setIsDirty, setSerializedObject, setTitle} from "@/store/features/listNote/listNoteSlice";
 
 type Props = {
     id?: string;
 }
 
 export const Form = ({id}: Props) => {
+    const dispatch = useAppDispatch();
+    const titleContent = useAppSelector(state => state.listNote.title);
+    const list = useAppSelector(state => state.listNote.list);
+    const isDirty = useAppSelector(state => state.listNote.isDirty);
+
     const [stateToEdit, getListNoteAction] = useActionState(getListNoteById, undefined);
-    const { state, setState, updateInputValue, addNewRow, removeRow, isDirty } = useSideUpdate([]);
+    // const { state, updateInputValue, addNewRow, removeRow, isDirty } = useSideUpdate();
     const [titleEditMode, setTitleEditMode] = useState(false);
     const titleInputRef = useRef<HTMLInputElement>(null);
     const titleInitialValue = useRef<string>('');
     const [showIsSaved, setShowIsSaved] = useState(false);
-    const [titleContent, setTitleContent] = useState('Default title');
-    const [listState, listAction] = useActionState(addListNote, {
+    const [createState, createAction] = useActionState(addListNote, {
         message: ''
     });
+    const [updateState, updateAction] = useActionState(updateListNote, { message: '' });
     const [updateTitleState, updateTitleAction] = useActionState(updateListNoteTitle, undefined);
-    const { message } = listState;
+    const message = createState?.message || updateState?.message || '';
     let timeoutId: any = null;
 
-    console.log('updateTitleState', updateTitleState);
+    console.log('updateState', updateState);
 
     const notifyOnSave = () => {
         clearTimeout(timeoutId);
@@ -51,11 +57,17 @@ export const Form = ({id}: Props) => {
     useEffect(() => {
         if (stateToEdit) {
             const { title, serializedObject } = stateToEdit;
-            setTitleContent(title);
+            dispatch(setTitle(title));
             titleInitialValue.current = title;
-            setState(JSON.parse(serializedObject));
+            dispatch(setSerializedObject(serializedObject));
         }
     }, [stateToEdit]);
+
+    useEffect(() => {
+        if (updateState.serializedObject) {
+            dispatch(setSerializedObject(updateState.serializedObject));
+        }
+    }, [updateState]);
 
     useEffect(() => {
         if (titleEditMode) {
@@ -82,16 +94,21 @@ export const Form = ({id}: Props) => {
         }
     }, [titleEditMode]);
 
-    const memoizedNormalizeList = useCallback(normalizeList, [state])
+    const memoizedNormalizeList = useCallback(normalizeList, [list])
 
     const handleSave = () => {
-        const normalizedData = memoizedNormalizeList(state);
+        const normalizedData = memoizedNormalizeList(list);
         startTransition(() => {
-            listAction({
-                title: titleContent,
-                data: normalizedData,
-            });
+            if (id) {
+                updateAction({ id: parseInt(id), data: JSON.stringify(normalizedData) })
+            } else {
+                createAction({
+                    title: titleContent,
+                    data: normalizedData,
+                });
+            }
         })
+        dispatch(setIsDirty(false));
     }
 
     return (
@@ -103,7 +120,7 @@ export const Form = ({id}: Props) => {
                         value={titleContent}
                         ref={titleInputRef}
                         className="text-2xl border-solid border-stone-200 border-2 min-w-[400px] block"
-                        onInput={(e: React.ChangeEvent<HTMLInputElement>) => setTitleContent(e.currentTarget.value)}
+                        onInput={(e: React.ChangeEvent<HTMLInputElement>) => dispatch(setTitle(e.currentTarget.value))}
                         onBlur={handleOnBlur}
                         onKeyDown={handleKeyDown} />
                 ) : (
@@ -112,7 +129,7 @@ export const Form = ({id}: Props) => {
                         <span className="text-gray-400 pr-2 group-hover:text-gray-500">
                             <Edit3 size={16}/>
                         </span>
-                            {`${titleContent} (${state.length})`}
+                            {`${titleContent} (${list.length})`}
                             {showIsSaved && (
                                 <span className="ml-2 self-end p-1 rounded text-xs text-white p2 border border-green-200 bg-green-400">Saved</span>
                             )}
@@ -120,10 +137,10 @@ export const Form = ({id}: Props) => {
                     </div>
                 )}
             </div>
-            <List updateInputValue={updateInputValue} removeRow={removeRow} state={state} />
+            <List list={list} />
 
             <div className="flex flex-row gap-5">
-                <BlueButton label="Add" action={addNewRow} />
+                <BlueButton label="Add" action={() => dispatch(createNewRow())} />
                 {isDirty && (<GreenButton label="Save" action={handleSave} />)}
             </div>
         </div>

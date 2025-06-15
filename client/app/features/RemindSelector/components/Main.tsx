@@ -18,7 +18,7 @@ export const Main = () => {
     }, []);
 
     const editSingleActionHandler = (id: SingleNote["id"]) => {
-        redirect(`/edit/single/${id}`);
+        redirect(`/single/edit/${id}`);
 
     }
 
