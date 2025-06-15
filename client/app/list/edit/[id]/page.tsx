@@ -13,7 +13,6 @@ export default async function EditListPage(props: PageProps) {
     return (
         <>
             <Header />
-            <h1>Edit list view {id}</h1>
             <Form id={id} />
         </>
     )

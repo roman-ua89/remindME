@@ -1,13 +1,14 @@
 import {Edit3} from "@deemlol/next-icons";
 import React, {startTransition, useActionState, useEffect, useRef, useState} from "react";
-import {setTitle} from "@/store/features/listNote/listNoteSlice";
+import {setId, setTitle} from "@/store/features/listNote/listNoteSlice";
 import {updateListNoteTitle} from "@/app/features/ListNote/actions";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 
 export const EditableTitle = () => {
     const dispatch = useAppDispatch();
-    const titleContent = useAppSelector(state => state.listNote.title);
+    const title = useAppSelector(state => state.listNote.title);
     const list = useAppSelector(state => state.listNote.list);
+    const id = useAppSelector(state => state.listNote.id);
 
     const [titleEditMode, setTitleEditMode] = useState(false);
     const titleInputRef = useRef<HTMLInputElement>(null);
@@ -23,18 +24,27 @@ export const EditableTitle = () => {
     }, [titleEditMode])
 
     useEffect(() => {
-        // console.log('titleContent', titleContent);
-        // console.log('titleInitialValue.current', titleInitialValue.current);
-        if (!titleEditMode && titleContent !== titleInitialValue.current && titleInitialValue.current && id) {
-            console.log('save title');
+        if (!titleEditMode && title !== titleInitialValue.current) {
             startTransition(() => {
-                updateTitleAction({ id: parseInt(id), title: titleContent });
+                updateTitleAction({ id, title: title });
+                titleInitialValue.current = title;
             })
         }
     }, [titleEditMode]);
 
+    useEffect(() => {
+        if (updateTitleState && !updateTitleState.message) {
+            const { id, title } = updateTitleState;
+            dispatch(setId(id));
+            dispatch(setTitle(title));
+            notifyOnSave();
+        }
+    }, [updateTitleState]);
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') setTitleEditMode(false);
+        if (e.key === 'Enter') {
+            setTitleEditMode(false);
+        }
     }
 
     const handleOnBlur = () => {
@@ -53,7 +63,7 @@ export const EditableTitle = () => {
         <div className="mb-4 min-h-10">
             {titleEditMode ? (
                 <input
-                    value={titleContent}
+                    value={title}
                     ref={titleInputRef}
                     className="text-2xl border-solid border-stone-200 border-2 min-w-[400px] block"
                     onInput={(e: React.ChangeEvent<HTMLInputElement>) => dispatch(setTitle(e.currentTarget.value))}
@@ -65,7 +75,7 @@ export const EditableTitle = () => {
                         <span className="text-gray-400 pr-2 group-hover:text-gray-500">
                             <Edit3 size={16}/>
                         </span>
-                        {`${titleContent} (${list.length})`}
+                        {`${title} (${list.length})`}
                         {showIsSaved && (
                             <span className="ml-2 self-end p-1 rounded text-xs text-white p2 border border-green-200 bg-green-400">Saved</span>
                         )}

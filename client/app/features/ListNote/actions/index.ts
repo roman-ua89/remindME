@@ -3,7 +3,7 @@
 import {
     CreatedListNoteResponse,
     IListNoteItem,
-    IListNoteResponse,
+    IListNoteResponse, IUpdateListNoteTitleResponse,
     ListNoteItem,
     SavedListNoteResponse,
     UpdatedListNoteResponse
@@ -94,22 +94,20 @@ type UpdateListNoteTitleProps = {
 export const updateListNoteTitle = async (_:any, {id, title}: UpdateListNoteTitleProps) => {
 
     const document = gql`
-        mutation updateListNoteTitle($id: Int!, $title: String!) {
+        mutation updateListNoteTitle($id: ID!, $title: String!) {
             updateListNoteTitle(id: $id, title: $title) {
                 id
                 title
-                serializedObject
             }
         }
     `;
 
     try {
-        const { listNoteItem } = await request<IListNoteResponse>(SERVER_URL, document, {
+        const { updateListNoteTitle } = await request<IUpdateListNoteTitleResponse>(SERVER_URL, document, {
             id,
             title
         });
-        console.log('update listNoteItem', listNoteItem);
-        return listNoteItem;
+        return updateListNoteTitle;
     } catch (e) {
         console.log('update listNoteItem', e);
     }

@@ -7,13 +7,15 @@ export interface ListNoteState {
     serializedObject: string;
     list: ListNoteItem[];
     isDirty: boolean;
+    id: number;
 }
 
 const initialState: ListNoteState = {
     title: 'Default title',
     serializedObject: '',
     list: [],
-    isDirty: false
+    isDirty: false,
+    id: 0,
 }
 
 type UpdateRightLeft = {
@@ -29,6 +31,9 @@ export const listNoteSlice = createSlice({
     name: 'singleNote',
     initialState,
     reducers: {
+        setId: (state, action: PayloadAction<number>) => {
+            state.id = action.payload;
+        },
         setIsDirty: (state, action: PayloadAction<boolean>) => {
             state.isDirty = action.payload;
         },
@@ -77,6 +82,6 @@ export const listNoteSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setIsDirty } = listNoteSlice.actions
+export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setIsDirty, setId } = listNoteSlice.actions
 
 export default listNoteSlice.reducer

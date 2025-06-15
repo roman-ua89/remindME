@@ -13,7 +13,7 @@ type Mutation {
 
     createListNote(title: String!, serializedObject: String!): ListNote!
     updateListNote(id: ID!, serializedObject: String!): ListNote!
-    updateListNoteTitle(id: ID!, title: String!): ListNote!
+    updateListNoteTitle(id: ID!, title: String!): ListNoteTitle!
 }
 
 type Message {
@@ -32,4 +32,9 @@ type ListNote {
     id: Int!
     title: String!
     serializedObject: String!
+}
+
+type ListNoteTitle {
+    id: Int!
+    title: String!
 }

@@ -9,7 +9,7 @@ import {addListNote, updateListNote} from "@/app/features/ListNote/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 import {getListNoteById} from "@/app/shared/actions";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
-import {createNewRow, setIsDirty, setSerializedObject, setTitle} from "@/store/features/listNote/listNoteSlice";
+import {createNewRow, setId, setIsDirty, setSerializedObject, setTitle} from "@/store/features/listNote/listNoteSlice";
 import {EditableTitle} from "@/app/features/ListNote/components/EditableTitle";
 
 type Props = {
@@ -37,9 +37,10 @@ export const Form = ({id}: Props) => {
 
     useEffect(() => {
         if (stateToEdit) {
-            const { title, serializedObject } = stateToEdit;
+            const { id, title, serializedObject } = stateToEdit;
             dispatch(setTitle(title));
             dispatch(setSerializedObject(serializedObject));
+            dispatch(setId(id));
         }
     }, [stateToEdit]);
 

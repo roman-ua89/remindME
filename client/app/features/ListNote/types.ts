@@ -35,3 +35,10 @@ export interface IListNoteItem {
 export interface IListNoteResponse {
     listNoteItem: IListNoteItem;
 }
+
+export interface IUpdateListNoteTitleResponse {
+    updateListNoteTitle: {
+        id: IListNoteItem["id"];
+        title: IListNoteItem["title"]
+    };
+}
