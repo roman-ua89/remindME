@@ -6,7 +6,7 @@ import {createSingleNote, updateSingleNote} from "@/app/features/SingleNote/acti
 import { getSingleNoteById } from "@/app/shared/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
-import {setTerm, setExplanation} from "@/store/features/singleNote/singleNoteSlice";
+import {setTerm, setExplanation, resetSingleNoteFields} from "@/store/features/singleNote/singleNoteSlice";
 
 type Props = {
     id?: string;
@@ -29,6 +29,10 @@ export const Form = ({id}: Props) => {
             startTransition(() => {
                 getNoteById(id);
             })
+        }
+
+        return () => {
+            dispatch(resetSingleNoteFields());
         }
     }, []);
 

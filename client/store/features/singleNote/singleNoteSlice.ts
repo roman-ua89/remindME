@@ -30,11 +30,15 @@ export const singleNoteSlice = createSlice({
         },
         setSingleNotes: (state, action: PayloadAction<SingleNoteTile[]>) => {
             state.notes = action.payload;
+        },
+        resetSingleNoteFields: (state) => {
+            state.term = '';
+            state.explanation = '';
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setTerm, setExplanation, setSingleNotes } = singleNoteSlice.actions
+export const { setTerm, setExplanation, setSingleNotes, resetSingleNoteFields } = singleNoteSlice.actions
 
 export default singleNoteSlice.reducer

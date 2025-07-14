@@ -4,10 +4,12 @@ import { gql, request } from 'graphql-request'
 import {SERVER_URL} from "@/app/shared/graphql/client";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
+import {ICreateSingleNoteResponse, ISingleNoteItem, ISingleNoteResponse} from "@/app/features/SingleNote/types";
 
 export const createSingleNote = async (state: { message: string }, formData: FormData) => {
     const term = formData.get('term');
     const explanation = formData.get('explanation');
+    let newItemId = 0;
 
     const document = gql`
       mutation createSingleNote($term: String!, $expl: String!) {
@@ -20,18 +22,19 @@ export const createSingleNote = async (state: { message: string }, formData: For
     `;
 
     try {
-      await request(SERVER_URL, document, {
+      const result = await request<ICreateSingleNoteResponse>(SERVER_URL, document, {
           term: term,
           expl: explanation
       });
+
+      newItemId = result.createSingleNote.id;
     } catch (e) {
         return {
             message: 'addSingleNote action | something went wrong' + e
         }
     }
-
     revalidatePath('/');
-    redirect('/');
+    redirect(`/single/edit/${newItemId}`);
 }
 
 export const updateSingleNote = async (formData: FormData) => {

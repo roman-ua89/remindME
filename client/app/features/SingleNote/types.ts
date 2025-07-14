@@ -24,3 +24,7 @@ export interface IListNote {
 export interface IListNoteResponse {
     listNoteById: IListNote;
 }
+
+export interface ICreateSingleNoteResponse {
+    createSingleNote: ISingleNoteItem;
+}
