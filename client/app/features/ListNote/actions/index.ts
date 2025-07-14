@@ -3,9 +3,8 @@
 import {
     CreatedListNoteResponse,
     IListNoteItem,
-    IListNoteResponse, IUpdateListNoteTitleResponse,
+    IUpdateListNoteTitleResponse,
     ListNoteItem,
-    SavedListNoteResponse,
     UpdatedListNoteResponse
 } from "@/app/features/ListNote/types";
 import {gql, request} from "graphql-request";

@@ -5,8 +5,8 @@ import {listNoteSlice} from "@/store/features/listNote/listNoteSlice";
 export const makeStore = () => {
     return configureStore({
         reducer: {
-            singleNote: singleNoteSlice.reducer,
-            listNote: listNoteSlice.reducer,
+            singleType: singleNoteSlice.reducer,
+            listType: listNoteSlice.reducer,
         },
     })
 }

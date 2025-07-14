@@ -2,19 +2,10 @@
 
 import { gql, request } from 'graphql-request'
 import {SERVER_URL} from "@/app/shared/graphql/client";
-import {ListNoteItem} from "@/app/features/ListNote/types";
+import {IListNoteTileResponse, ListNoteTile} from "@/app/features/ListNote/types";
+import {ISingleNoteTileResponse, SingleNoteTile} from "@/app/features/SingleNote/types";
 
-export interface SingleNote {
-    id: number;
-    term: string;
-    explanation: string;
-}
-
-interface Item {
-    singleNotes: SingleNote[]
-}
-
-export const getSingleItems = async (): Promise<Item> => {
+export const getSingleItems = async (): Promise<SingleNoteTile[]> => {
   const document = gql`
       query {
           singleNotes {
@@ -24,19 +15,12 @@ export const getSingleItems = async (): Promise<Item> => {
       }
   `;
 
-    return await request(SERVER_URL, document);
+    const result = await request<ISingleNoteTileResponse>(SERVER_URL, document);
+    return result.singleNotes || [];
 }
 
-export type ListItemReturnType = {
-    id: ListNoteItem["id"];
-    title: string;
-}
 
-export interface GetListItemsReturnType {
-    listNotes: ListItemReturnType[];
-}
-
-export const getListItems = async (): Promise<GetListItemsReturnType> => {
+export const getListItems = async (): Promise<ListNoteTile[]> => {
   const document = gql`
       query {
           listNotes {
@@ -46,5 +30,6 @@ export const getListItems = async (): Promise<GetListItemsReturnType> => {
       }
   `;
 
-    return await request(SERVER_URL, document);
+  const result = await request<IListNoteTileResponse>(SERVER_URL, document);
+  return result.listNotes || [];
 }

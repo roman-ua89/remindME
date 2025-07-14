@@ -6,9 +6,9 @@ import {useAppDispatch, useAppSelector} from "@/store/hooks";
 
 export const EditableTitle = () => {
     const dispatch = useAppDispatch();
-    const title = useAppSelector(state => state.listNote.title);
-    const list = useAppSelector(state => state.listNote.list);
-    const id = useAppSelector(state => state.listNote.id);
+    const title = useAppSelector(state => state.listType.title);
+    const list = useAppSelector(state => state.listType.list);
+    const id = useAppSelector(state => state.listType.id);
 
     const [titleEditMode, setTitleEditMode] = useState(false);
     const titleInputRef = useRef<HTMLInputElement>(null);

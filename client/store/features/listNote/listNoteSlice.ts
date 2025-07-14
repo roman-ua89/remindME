@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import {ListNoteItem} from "@/app/features/ListNote/types";
+import {ListNoteItem, ListNoteTile} from "@/app/features/ListNote/types";
+import {AppDispatch, AppStore} from "@/store/store";
 
 export interface ListNoteState {
     title: string,
@@ -8,6 +9,7 @@ export interface ListNoteState {
     list: ListNoteItem[];
     isDirty: boolean;
     id: number;
+    notes: ListNoteTile[];
 }
 
 const initialState: ListNoteState = {
@@ -16,6 +18,7 @@ const initialState: ListNoteState = {
     list: [],
     isDirty: false,
     id: 0,
+    notes: []
 }
 
 type UpdateRightLeft = {
@@ -77,11 +80,14 @@ export const listNoteSlice = createSlice({
                 if (item.id > latestId) latestId = item.id;
             })
             state.list = [...state.list, { id: latestId + 1, left: '', right: '' }]
+        },
+        setListNotes: (state, action: PayloadAction<ListNoteTile[]>) => {
+            state.notes = action.payload;
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setIsDirty, setId } = listNoteSlice.actions
+export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setIsDirty, setId, setListNotes } = listNoteSlice.actions
 
 export default listNoteSlice.reducer

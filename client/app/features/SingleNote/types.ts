@@ -1,12 +1,18 @@
 
-export interface ISingleNote {
+export interface ISingleNoteItem {
     id: number;
     term: string;
     explanation: string;
 }
 
+export type SingleNoteTile = Pick<ISingleNoteItem, 'id' | 'term'>
+
+export interface ISingleNoteTileResponse {
+    singleNotes: SingleNoteTile[];
+}
+
 export interface ISingleNoteResponse {
-    singleNoteById: ISingleNote;
+    singleNoteById: ISingleNoteItem;
 }
 
 export interface IListNote {

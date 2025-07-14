@@ -17,8 +17,8 @@ type Props = {
 export const Form = ({id}: Props) => {
     const dispatch = useAppDispatch();
 
-    const term = useAppSelector(state => state.singleNote.term);
-    const explanation = useAppSelector(state => state.singleNote.explanation);
+    const term = useAppSelector(state => state.singleType.term);
+    const explanation = useAppSelector(state => state.singleType.explanation);
 
     const [state, createSingleNoteAction] = useActionState(createSingleNote, { message: '' });
     const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined);

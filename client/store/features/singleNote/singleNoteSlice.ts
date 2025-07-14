@@ -1,14 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import {SingleNoteTile} from "@/app/features/SingleNote/types";
 
 export interface SingleNoteState {
     term: string,
     explanation: string,
+    notes: SingleNoteTile[],
 }
 
 const initialState: SingleNoteState = {
     term: '',
-    explanation: ''
+    explanation: '',
+    notes: [],
 }
 
 export const singleNoteSlice = createSlice({
@@ -25,10 +28,13 @@ export const singleNoteSlice = createSlice({
         setExplanation: (state, action: PayloadAction<string>) => {
             state.explanation = action.payload;
         },
+        setSingleNotes: (state, action: PayloadAction<SingleNoteTile[]>) => {
+            state.notes = action.payload;
+        }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setTerm, setExplanation } = singleNoteSlice.actions
+export const { setTerm, setExplanation, setSingleNotes } = singleNoteSlice.actions
 
 export default singleNoteSlice.reducer

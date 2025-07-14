@@ -1,19 +1,20 @@
 
+export interface IListNoteItem {
+    id: number;
+    title: string;
+    serializedObject: string;
+}
+
+export type ListNoteTile = Pick<IListNoteItem, 'id' | 'title'>;
+
 export type ListNoteItem = {
     id: number;
     left: string;
     right: string;
 }
 
-export interface ServerData {
-    title: string;
-    list: ListNoteItem[]
-}
-
-interface ServerListNote {
-    id: number;
-    title: string;
-    serializedObject: string;
+export interface IListNoteTileResponse {
+    listNotes: ListNoteTile[];
 }
 
 export interface CreatedListNoteResponse {
@@ -24,13 +25,6 @@ export interface UpdatedListNoteResponse {
     updateListNote: IListNoteItem;
 }
 
-// -------------how should be
-
-export interface IListNoteItem {
-    id: number;
-    title: string;
-    serializedObject: string;
-}
 
 export interface IListNoteResponse {
     listNoteItem: IListNoteItem;

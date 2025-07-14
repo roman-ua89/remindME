@@ -33,6 +33,10 @@ export const Form = ({id}: Props) => {
                 getListNoteAction(id);
             })
         }
+
+        return () => {
+            alert('stop')
+        }
     }, []);
 
     useEffect(() => {

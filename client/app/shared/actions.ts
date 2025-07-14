@@ -41,3 +41,7 @@ export const getListNoteById = async (_: any, id: string) => {
         console.log('getSingleNoteById action | something went wrong' + e)
     }
 }
+
+export const deleteListNoteById = async(_: any, id: string) => {
+
+}
