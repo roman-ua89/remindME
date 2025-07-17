@@ -25,9 +25,8 @@ export interface UpdatedListNoteResponse {
     updateListNote: IListNoteItem;
 }
 
-
-export interface IListNoteResponse {
-    listNoteItem: IListNoteItem;
+export interface DeletedListNoteResponse {
+    deleteListNoteById: ListNoteTile[];
 }
 
 export interface IUpdateListNoteTitleResponse {

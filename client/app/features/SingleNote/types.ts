@@ -28,3 +28,7 @@ export interface IListNoteResponse {
 export interface ICreateSingleNoteResponse {
     createSingleNote: ISingleNoteItem;
 }
+
+export interface IEditSingleNoteResponse {
+    updateSingleNote: ISingleNoteItem;
+}

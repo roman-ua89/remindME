@@ -6,7 +6,7 @@ import {createSingleNote, updateSingleNote} from "@/app/features/SingleNote/acti
 import { getSingleNoteById } from "@/app/shared/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
-import {setTerm, setExplanation, resetSingleNoteFields} from "@/store/features/singleNote/singleNoteSlice";
+import {setTerm, setExplanation, resetSingleNoteFields, setIsDirty} from "@/store/features/singleNote/singleNoteSlice";
 
 type Props = {
     id?: string;
@@ -19,9 +19,11 @@ export const Form = ({id}: Props) => {
 
     const term = useAppSelector(state => state.singleType.term);
     const explanation = useAppSelector(state => state.singleType.explanation);
+    const isDirty = useAppSelector(state => state.singleType.isDirty);
 
     const [state, createSingleNoteAction] = useActionState(createSingleNote, { message: '' });
     const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined);
+    const [stateUpdated, updateSingleNoteAction] = useActionState(updateSingleNote, { message: '' })
     const { message } = state;
 
     useEffect(() => {
@@ -44,6 +46,14 @@ export const Form = ({id}: Props) => {
 
     }, [stateToEdit]);
 
+    useEffect(() => {
+        if (stateUpdated.term && stateUpdated.explanation) {
+            dispatch(setTerm(stateUpdated.term));
+            dispatch(setExplanation(stateUpdated.explanation));
+        }
+
+    }, [stateUpdated])
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         startTransition(() => {
@@ -52,10 +62,11 @@ export const Form = ({id}: Props) => {
             formData.append('explanation', explanation);
             if (id) {
                 formData.append('id', id);
-                updateSingleNote(formData);
+                updateSingleNoteAction(formData);
             } else {
                 createSingleNoteAction(formData);
             }
+            dispatch(setIsDirty(false));
         })
     }
 
@@ -85,7 +96,7 @@ export const Form = ({id}: Props) => {
                 </div>
                 <div>
                     <BlueButton
-                        disabled={!explanation || !term}
+                        disabled={!explanation || !term || !isDirty}
                         label="Save" />
                 </div>
             </form>

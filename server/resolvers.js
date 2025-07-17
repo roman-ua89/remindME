@@ -81,6 +81,19 @@ export const resolvers = {
       })
       return result;
     },
+    deleteListNoteById: async (_, { id }) => {
+      await prisma.listNote.delete({
+        where: {
+          id: parseInt(id)
+        }
+      })
+      return prisma.listNote.findMany({
+        orderBy: {
+          id: 'desc'
+        },
+        take: 10
+      })
+    },
     updateListNoteTitle: async (_, { id, title }) => {
       const result = await prisma.listNote.update({
         where: {

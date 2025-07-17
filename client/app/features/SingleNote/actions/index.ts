@@ -4,7 +4,13 @@ import { gql, request } from 'graphql-request'
 import {SERVER_URL} from "@/app/shared/graphql/client";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
-import {ICreateSingleNoteResponse, ISingleNoteItem, ISingleNoteResponse} from "@/app/features/SingleNote/types";
+import {
+    ICreateSingleNoteResponse,
+    IEditSingleNoteResponse,
+    ISingleNoteItem,
+    ISingleNoteResponse
+} from "@/app/features/SingleNote/types";
+import {IActionMessage} from "@/app/shared/types/types";
 
 export const createSingleNote = async (state: { message: string }, formData: FormData) => {
     const term = formData.get('term');
@@ -37,7 +43,7 @@ export const createSingleNote = async (state: { message: string }, formData: For
     redirect(`/single/edit/${newItemId}`);
 }
 
-export const updateSingleNote = async (formData: FormData) => {
+export const updateSingleNote = async (_: any, formData: FormData):Promise<ISingleNoteItem | IActionMessage> => {
     const term = formData.get('term');
     const explanation = formData.get('explanation');
     const id = formData.get('id');
@@ -53,15 +59,16 @@ export const updateSingleNote = async (formData: FormData) => {
     `;
 
     try {
-        await request(SERVER_URL, document, {
+        const result = await request<IEditSingleNoteResponse>(SERVER_URL, document, {
             term: term,
             expl: explanation,
             id
         });
-    } catch (e) {
-        console.log('updateSingleNote action | something went wrong' + e);
-    }
 
-    revalidatePath('/');
-    redirect('/');
+        return result.updateSingleNote;
+    } catch (e) {
+        return {
+            message: 'updateSingleNote action | something went wrong' + e
+        }
+    }
 }

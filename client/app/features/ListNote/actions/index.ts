@@ -22,8 +22,8 @@ export const addListNote = async (state: { message: string }, dataToSave: AddLis
     const { title, data } = dataToSave;
 
     const document = gql`
-        mutation createListNote($title: String!, $serializedObject: String!) {
-            listNote(title: $title, serializedObject: $serializedObject) {
+        mutation createListNoteItem($title: String!, $serializedObject: String!) {
+            createListNote(title: $title, serializedObject: $serializedObject) {
                 id
                 title
                 serializedObject
@@ -55,8 +55,6 @@ export type UpdateListNoteProps = {
 }
 
 type ErrorMsg = { message: string };
-
-export type UpdateListNoteReturnType = ErrorMsg | IListNoteItem;
 
 export const updateListNote = async (_: any, dataToSave: UpdateListNoteProps) => {
     const { id, data } = dataToSave;

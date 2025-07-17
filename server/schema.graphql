@@ -14,6 +14,7 @@ type Mutation {
     createListNote(title: String!, serializedObject: String!): ListNote!
     updateListNote(id: ID!, serializedObject: String!): ListNote!
     updateListNoteTitle(id: ID!, title: String!): ListNoteTitle!
+    deleteListNoteById(id: ID!): [ListNoteTitle]!
 }
 
 type Message {

@@ -6,9 +6,8 @@ import {Main} from "@/app/features/RemindSelector";
 
 export default function Home() {
 
-
     return (
-        <div className="">
+        <div>
             <Header />
             <Main />
         </div>

@@ -9,13 +9,16 @@ import {ISingleNoteItem} from "@/app/features/SingleNote/types";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {setSingleNotes} from "@/store/features/singleNote/singleNoteSlice";
 import {setListNotes} from "@/store/features/listNote/listNoteSlice";
+import {deleteListNoteById} from "@/app/shared/actions";
 
 export const Main = () => {
-    const [singleFormState, singleAction, singleIsPending] = useActionState(getSingleItems, []);
-    const [listFormState, listAction, listIsPending] = useActionState(getListItems, []);
-    const dispatch = useAppDispatch();
     const singleNotes = useAppSelector(state => state.singleType.notes);
     const listNotes = useAppSelector(state => state.listType.notes);
+    const dispatch = useAppDispatch();
+
+    const [singleFormState, singleAction, singleIsPending] = useActionState(getSingleItems, []);
+    const [listFormState, listAction, listIsPending] = useActionState(getListItems, []);
+    const [afterDeleteListState, deleteListByIdAction] = useActionState(deleteListNoteById, [])
 
     useEffect(() => {
         startTransition(() => {
@@ -31,7 +34,11 @@ export const Main = () => {
         if (listFormState.length) {
             dispatch(setListNotes(listFormState));
         }
-    }, [singleFormState, listFormState])
+        if (Array.isArray(afterDeleteListState) && afterDeleteListState.length) {
+            console.log('afterDeleteListState', afterDeleteListState);
+            dispatch(setListNotes(afterDeleteListState))
+        }
+    }, [singleFormState, listFormState, afterDeleteListState]);
 
     const editSingleActionHandler = (id: ISingleNoteItem["id"]) => {
         redirect(`/single/edit/${id}`);
@@ -42,10 +49,14 @@ export const Main = () => {
         redirect(`/list/edit/${id}`);
     }
 
-    const deleteListActionHandler = (id: ListNoteItem["id"], title: string) => {
+    const deleteListActionHandler = async (id: ListNoteItem["id"], title: string) => {
         const confirmResult = confirm(`Are you sure you want to delete '${title}'`);
         if (confirmResult) {
-            alert('go');
+            console.log('in')
+            startTransition(() => {
+                console.log('transition')
+                deleteListByIdAction(id);
+            })
         }
     }
 

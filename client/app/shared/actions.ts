@@ -1,6 +1,8 @@
 import {gql, request} from "graphql-request";
 import {IListNoteResponse, ISingleNoteResponse} from "@/app/features/SingleNote/types";
 import {SERVER_URL} from "@/app/shared/graphql/client";
+import {DeletedListNoteResponse, ListNoteTile} from "@/app/features/ListNote/types";
+import {revalidatePath} from "next/cache";
 
 export const getSingleNoteById = async (_: any, id: string) => {
 
@@ -42,6 +44,23 @@ export const getListNoteById = async (_: any, id: string) => {
     }
 }
 
-export const deleteListNoteById = async(_: any, id: string) => {
+export const deleteListNoteById = async (_:any, id: number): Promise<ListNoteTile[] | { message:string }> => {
 
+  const document = gql`
+      mutation deleteListNote($id: ID!) {
+          deleteListNoteById(id: $id) {
+              id
+              title
+          }
+      }
+  `;
+
+  try {
+      const { deleteListNoteById } = await request<DeletedListNoteResponse>(SERVER_URL, document, { id });
+      return deleteListNoteById;
+  } catch (e) {
+      return {
+          message: 'Something went wrong during removing ListNote item' + e
+      }
+  }
 }

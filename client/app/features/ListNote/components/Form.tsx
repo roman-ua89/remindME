@@ -18,9 +18,9 @@ type Props = {
 
 export const Form = ({id}: Props) => {
     const dispatch = useAppDispatch();
-    const list = useAppSelector(state => state.listNote.list);
-    const isDirty = useAppSelector(state => state.listNote.isDirty);
-    const title = useAppSelector(state => state.listNote.title);
+    const list = useAppSelector(state => state.listType.list);
+    const isDirty = useAppSelector(state => state.listType.isDirty);
+    const title = useAppSelector(state => state.listType.title);
 
     const [stateToEdit, getListNoteAction] = useActionState(getListNoteById, undefined);
     const [createState, createAction] = useActionState(addListNote, { message: '' });
@@ -32,10 +32,6 @@ export const Form = ({id}: Props) => {
             startTransition(() => {
                 getListNoteAction(id);
             })
-        }
-
-        return () => {
-            alert('stop')
         }
     }, []);
 
