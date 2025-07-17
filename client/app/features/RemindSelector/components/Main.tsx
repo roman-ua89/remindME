@@ -9,7 +9,7 @@ import {ISingleNoteItem} from "@/app/features/SingleNote/types";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {setSingleNotes} from "@/store/features/singleNote/singleNoteSlice";
 import {setListNotes} from "@/store/features/listNote/listNoteSlice";
-import {deleteListNoteById} from "@/app/shared/actions";
+import {deleteListNoteById, deleteSingleNoteById} from "@/app/shared/actions";
 
 export const Main = () => {
     const singleNotes = useAppSelector(state => state.singleType.notes);
@@ -18,7 +18,9 @@ export const Main = () => {
 
     const [singleFormState, singleAction, singleIsPending] = useActionState(getSingleItems, []);
     const [listFormState, listAction, listIsPending] = useActionState(getListItems, []);
-    const [afterDeleteListState, deleteListByIdAction] = useActionState(deleteListNoteById, [])
+
+    const [afterDeleteListState, deleteListByIdAction] = useActionState(deleteListNoteById, []);
+    const [afterDeleteSingleState, deleteSingleByIdAction] = useActionState(deleteSingleNoteById, []);
 
     useEffect(() => {
         startTransition(() => {
@@ -35,10 +37,12 @@ export const Main = () => {
             dispatch(setListNotes(listFormState));
         }
         if (Array.isArray(afterDeleteListState) && afterDeleteListState.length) {
-            console.log('afterDeleteListState', afterDeleteListState);
             dispatch(setListNotes(afterDeleteListState))
         }
-    }, [singleFormState, listFormState, afterDeleteListState]);
+        if (Array.isArray(afterDeleteSingleState) && afterDeleteSingleState.length) {
+            dispatch(setSingleNotes(afterDeleteSingleState))
+        }
+    }, [singleFormState, listFormState, afterDeleteListState, afterDeleteSingleState]);
 
     const editSingleActionHandler = (id: ISingleNoteItem["id"]) => {
         redirect(`/single/edit/${id}`);
@@ -52,10 +56,19 @@ export const Main = () => {
     const deleteListActionHandler = async (id: ListNoteItem["id"], title: string) => {
         const confirmResult = confirm(`Are you sure you want to delete '${title}'`);
         if (confirmResult) {
+            startTransition(() => {
+                deleteListByIdAction(id);
+            })
+        }
+    }
+
+    const deleteSingleActionHandler = async (id: ISingleNoteItem["id"], term: ISingleNoteItem["term"]) => {
+        const confirmResult = confirm(`Are you sure you want to delete '${term}'`);
+        if (confirmResult) {
             console.log('in')
             startTransition(() => {
                 console.log('transition')
-                deleteListByIdAction(id);
+                deleteSingleByIdAction(id);
             })
         }
     }
@@ -86,6 +99,7 @@ export const Main = () => {
                                     <ActionButton label="View" />
                                     <ActionButton label="Play" action={() => playSingleNoteHandler(id)} />
                                     <ActionButton label="Edit" action={() => editSingleActionHandler(id)} />
+                                    <RedButton label="Delete" action={() => deleteSingleActionHandler(id, term)} />
                                 </div>
                             </div>
                         )
@@ -107,7 +121,7 @@ export const Main = () => {
                                 <div className="flex gap-4">
                                     <ActionButton label="Play" action={() => playListActionHandler(id)} />
                                     <ActionButton label="Edit" action={() => editListActionHandler(id)} />
-                                    <RedButton label="Delete" action={() => deleteListActionHandler(id, title)} />
+                                    <RedButton label="Delete" action={() => deleteListActionHandler(id)} />
                                 </div>
                             </div>
                         )

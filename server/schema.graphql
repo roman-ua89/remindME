@@ -10,6 +10,7 @@ type Mutation {
     createMessage(content: String!, author: String!): Message!
     createSingleNote(term: String!, explanation: String!): SingleNote!
     updateSingleNote(id: ID!, term: String!, explanation: String!): SingleNote!
+    deleteSingleNoteById(id: ID!): [SingleNoteTitle]!
 
     createListNote(title: String!, serializedObject: String!): ListNote!
     updateListNote(id: ID!, serializedObject: String!): ListNote!
@@ -38,4 +39,9 @@ type ListNote {
 type ListNoteTitle {
     id: Int!
     title: String!
+}
+
+type SingleNoteTitle {
+    id: Int!
+    term: String!
 }

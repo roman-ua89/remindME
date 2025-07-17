@@ -9,7 +9,12 @@ export const resolvers = {
       return prisma.message.findMany(); // Use Prisma to fetch messages
     },
     singleNotes: async () => {
-      return prisma.singleNote.findMany()
+      return prisma.singleNote.findMany({
+        orderBy: {
+          id: 'desc'
+        },
+        take: 10
+      })
     },
     singleNoteById: async (_root, { id }) => {
       return prisma.singleNote.findUnique({
@@ -26,7 +31,12 @@ export const resolvers = {
       })
     },
     listNotes: async () => {
-      return prisma.listNote.findMany()
+      return prisma.listNote.findMany({
+        orderBy: {
+          id: 'desc'
+        },
+        take: 10
+      })
     }
   },
   Mutation: {
@@ -59,6 +69,19 @@ export const resolvers = {
         }
       })
       return result;
+    },
+    deleteSingleNoteById: async (_, {id}) => {
+      await prisma.singleNote.delete({
+        where: {
+          id: parseInt(id)
+        }
+      })
+      return prisma.singleNote.findMany({
+        orderBy: {
+          id: 'desc'
+        },
+        take: 10
+      })
     },
     createListNote: async (_, { title, serializedObject }) => {
       const result = await prisma.listNote.create({

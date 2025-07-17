@@ -1,3 +1,4 @@
+import {ListNoteTile} from "@/app/features/ListNote/types";
 
 export interface ISingleNoteItem {
     id: number;
@@ -31,4 +32,8 @@ export interface ICreateSingleNoteResponse {
 
 export interface IEditSingleNoteResponse {
     updateSingleNote: ISingleNoteItem;
+}
+
+export interface IDeleteSingleNoteResponse {
+    deleteSingleNoteById: SingleNoteTile[];
 }
