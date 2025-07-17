@@ -121,7 +121,7 @@ export const Main = () => {
                                 <div className="flex gap-4">
                                     <ActionButton label="Play" action={() => playListActionHandler(id)} />
                                     <ActionButton label="Edit" action={() => editListActionHandler(id)} />
-                                    <RedButton label="Delete" action={() => deleteListActionHandler(id)} />
+                                    <RedButton label="Delete" action={() => deleteListActionHandler(id, title)} />
                                 </div>
                             </div>
                         )
