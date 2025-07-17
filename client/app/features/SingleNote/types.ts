@@ -1,4 +1,3 @@
-import {ListNoteTile} from "@/app/features/ListNote/types";
 
 export interface ISingleNoteItem {
     id: number;

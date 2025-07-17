@@ -2,7 +2,6 @@
 
 import {getSingleItems, getListItems} from "@/app/features/RemindSelector/actions";
 import { useActionState, startTransition, useEffect } from "react";
-import {ActionButton, RedButton} from "@/app/shared/UI/Buttons";
 import {redirect} from "next/navigation";
 import {IListNoteItem, ListNoteItem} from "@/app/features/ListNote/types";
 import {ISingleNoteItem} from "@/app/features/SingleNote/types";
@@ -10,6 +9,8 @@ import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {setSingleNotes} from "@/store/features/singleNote/singleNoteSlice";
 import {setListNotes} from "@/store/features/listNote/listNoteSlice";
 import {deleteListNoteById, deleteSingleNoteById} from "@/app/shared/actions";
+import {ListView} from "@/app/features/RemindSelector/components/ListView";
+import {SingleView} from "@/app/features/RemindSelector/components/SingleView";
 
 export const Main = () => {
     const singleNotes = useAppSelector(state => state.singleType.notes);
@@ -65,9 +66,7 @@ export const Main = () => {
     const deleteSingleActionHandler = async (id: ISingleNoteItem["id"], term: ISingleNoteItem["term"]) => {
         const confirmResult = confirm(`Are you sure you want to delete '${term}'`);
         if (confirmResult) {
-            console.log('in')
             startTransition(() => {
-                console.log('transition')
                 deleteSingleByIdAction(id);
             })
         }
@@ -83,50 +82,20 @@ export const Main = () => {
 
     return (
         <>
-            <h1 className="h1">Single items</h1>
             {singleIsPending ? (<div>singleIsPending...</div>) : (
-                <ul className="mb-5">
-                    {singleNotes.map(item => {
-                        const { id, term } = item;
-
-                        return (
-                            <div key={id} className="item-presentation">
-                                <div className="flex items-center">
-                                    <span className="item-type">S</span>
-                                    <span className="item-type-text">{term}</span>
-                                </div>
-                                <div className="flex gap-4">
-                                    <ActionButton label="View" />
-                                    <ActionButton label="Play" action={() => playSingleNoteHandler(id)} />
-                                    <ActionButton label="Edit" action={() => editSingleActionHandler(id)} />
-                                    <RedButton label="Delete" action={() => deleteSingleActionHandler(id, term)} />
-                                </div>
-                            </div>
-                        )
-                    })}
-                </ul>
+                <SingleView
+                    singleNotes={singleNotes}
+                    playSingleNoteHandler={playSingleNoteHandler}
+                    editSingleActionHandler={editSingleActionHandler}
+                    deleteSingleActionHandler={deleteSingleActionHandler} />
             )}
 
-            <h1 className="h1">List items</h1>
             {listIsPending ? (<div>singleIsPending...</div>) : (
-                <ul>
-                    {listNotes.map(item => {
-                        const { id, title } = item;
-                        return (
-                            <div key={id} className="item-presentation">
-                                <div className="flex items-center">
-                                    <span className="item-type">L</span>
-                                    <span className="item-type-text">{title}</span>
-                                </div>
-                                <div className="flex gap-4">
-                                    <ActionButton label="Play" action={() => playListActionHandler(id)} />
-                                    <ActionButton label="Edit" action={() => editListActionHandler(id)} />
-                                    <RedButton label="Delete" action={() => deleteListActionHandler(id, title)} />
-                                </div>
-                            </div>
-                        )
-                    })}
-                </ul>
+                <ListView
+                    listNotes={listNotes}
+                    editListActionHandler={editListActionHandler}
+                    deleteListActionHandler={deleteListActionHandler}
+                    playListActionHandler={playListActionHandler} />
             )}
         </>
     )
