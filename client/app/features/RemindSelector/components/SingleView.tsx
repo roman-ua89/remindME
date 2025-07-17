@@ -1,3 +1,4 @@
+import React from 'react';
 import {ActionButton, RedButton} from "@/app/shared/UI/Buttons";
 import {ISingleNoteItem, SingleNoteTile} from "@/app/features/SingleNote/types";
 
