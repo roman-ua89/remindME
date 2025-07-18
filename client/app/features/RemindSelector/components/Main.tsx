@@ -7,15 +7,14 @@ import { redirect } from 'next/navigation';
 import { IListNoteItem, ListNoteItem } from '@/app/features/ListNote/types';
 import { ISingleNoteItem } from '@/app/features/SingleNote/types';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setSingleNotes } from '@/store/features/singleNote/singleNoteSlice';
-import { setListNotes } from '@/store/features/listNote/listNoteSlice';
 import { deleteListNoteById, deleteSingleNoteById } from '@/app/shared/actions';
-import { ListView } from '@/app/features/RemindSelector/components/ListView';
-import { SingleView } from '@/app/features/RemindSelector/components/SingleView';
+import { setListNotes, setSingleNotes } from '@/store/features/remindSelector/remindSelectorSlice';
+import { NotesViewWrapper } from '@/app/features/RemindSelector/components/NotesViewWrapper';
 
 export const Main = () => {
-    const singleNotes = useAppSelector((state) => state.singleType.notes);
-    const listNotes = useAppSelector((state) => state.listType.notes);
+    const singleNotes = useAppSelector((state) => state.remindSelector.singleNotes);
+    const listNotes = useAppSelector((state) => state.remindSelector.listNotes);
+    const searchResults = useAppSelector((state) => state.remindSelector.searchResults);
     const dispatch = useAppDispatch();
 
     const [singleFormState, singleAction, singleIsPending] = useActionState(getSingleItems, []);
@@ -80,29 +79,36 @@ export const Main = () => {
         redirect(`/single/play/${id}`);
     };
 
-    return (
-        <>
-            {singleIsPending ? (
-                <div>singleIsPending...</div>
-            ) : (
-                <SingleView
-                    singleNotes={singleNotes}
-                    playSingleNoteHandler={playSingleNoteHandler}
-                    editSingleActionHandler={editSingleActionHandler}
-                    deleteSingleActionHandler={deleteSingleActionHandler}
-                />
-            )}
+    if (searchResults.singleNotes.length || searchResults.listNotes.length) {
+        const { listNotes: searchedListNotes, singleNotes: searchedSingleNotes } = searchResults;
+        return (
+            <NotesViewWrapper
+                singleIsPending={false}
+                listIsPending={false}
+                singleNotes={searchedSingleNotes}
+                listNotes={searchedListNotes}
+                playSingleNoteHandler={playSingleNoteHandler}
+                editSingleActionHandler={editSingleActionHandler}
+                deleteSingleActionHandler={deleteSingleActionHandler}
+                playListActionHandler={playListActionHandler}
+                editListActionHandler={editListActionHandler}
+                deleteListActionHandler={deleteListActionHandler}
+            />
+        );
+    }
 
-            {listIsPending ? (
-                <div>singleIsPending...</div>
-            ) : (
-                <ListView
-                    listNotes={listNotes}
-                    editListActionHandler={editListActionHandler}
-                    deleteListActionHandler={deleteListActionHandler}
-                    playListActionHandler={playListActionHandler}
-                />
-            )}
-        </>
+    return (
+        <NotesViewWrapper
+            singleIsPending={singleIsPending}
+            listIsPending={listIsPending}
+            singleNotes={singleNotes}
+            listNotes={listNotes}
+            playSingleNoteHandler={playSingleNoteHandler}
+            editSingleActionHandler={editSingleActionHandler}
+            deleteSingleActionHandler={deleteSingleActionHandler}
+            playListActionHandler={playListActionHandler}
+            editListActionHandler={editListActionHandler}
+            deleteListActionHandler={deleteListActionHandler}
+        />
     );
 };

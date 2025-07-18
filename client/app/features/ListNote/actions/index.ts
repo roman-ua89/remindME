@@ -54,8 +54,6 @@ export type UpdateListNoteProps = {
     data: IListNote["serializedObject"];
 }
 
-type ErrorMsg = { message: string };
-
 export const updateListNote = async (_: any, dataToSave: UpdateListNoteProps) => {
     const { id, data } = dataToSave;
 

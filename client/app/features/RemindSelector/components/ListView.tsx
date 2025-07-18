@@ -1,3 +1,4 @@
+import React from 'react';
 import {ActionButton, RedButton} from "@/app/shared/UI/Buttons";
 import {IListNoteItem, ListNoteTile} from "@/app/features/ListNote/types";
 
@@ -21,7 +22,7 @@ export const ListView = ({
                 {listNotes.map(item => {
                     const { id, title } = item;
                     return (
-                        <div key={id} className="item-presentation">
+                        <div key={`list-${id}`} className="item-presentation">
                             <div className="flex items-center">
                                 <span className="item-type">L</span>
                                 <span className="item-type-text">{title}</span>

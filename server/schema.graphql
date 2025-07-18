@@ -4,6 +4,7 @@ type Query {
     singleNoteById(id: ID!): SingleNote
     listNoteById(id: ID!): ListNote
     listNotes: [ListNote]!
+    searchNotes(searchTerm: String!): SearchResults!
 }
 
 type Mutation {
@@ -44,4 +45,9 @@ type ListNoteTitle {
 type SingleNoteTitle {
     id: Int!
     term: String!
+}
+
+type SearchResults {
+    singleNotes: [SingleNoteTitle!]!
+    listNotes: [ListNoteTitle!]!
 }

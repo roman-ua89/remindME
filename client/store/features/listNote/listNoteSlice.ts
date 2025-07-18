@@ -1,15 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import {ListNoteItem, ListNoteTile} from "@/app/features/ListNote/types";
-import {AppDispatch, AppStore} from "@/store/store";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { ListNoteItem } from '@/app/features/ListNote/types';
 
 export interface ListNoteState {
-    title: string,
+    title: string;
     serializedObject: string;
     list: ListNoteItem[];
     isDirty: boolean;
     id: number;
-    notes: ListNoteTile[];
 }
 
 const initialState: ListNoteState = {
@@ -18,17 +16,16 @@ const initialState: ListNoteState = {
     list: [],
     isDirty: false,
     id: 0,
-    notes: []
-}
+};
 
 type UpdateRightLeft = {
     id: number;
     value: string;
-}
+};
 
 type DeleteRowType = {
     id: number;
-}
+};
 
 export const listNoteSlice = createSlice({
     name: 'singleNote',
@@ -45,13 +42,13 @@ export const listNoteSlice = createSlice({
         },
         setSerializedObject: (state, action: PayloadAction<string>) => {
             state.serializedObject = action.payload;
-            state.list = state.serializedObject ? JSON.parse(state.serializedObject): [];
+            state.list = state.serializedObject ? JSON.parse(state.serializedObject) : [];
         },
         updateLeft: (state, action: PayloadAction<UpdateRightLeft>) => {
             const { id, value } = action.payload;
             state.list = state.list.map((item) => {
                 if (item.id === id) {
-                    return { ...item, left: value }
+                    return { ...item, left: value };
                 } else {
                     return item;
                 }
@@ -62,7 +59,7 @@ export const listNoteSlice = createSlice({
             const { id, value } = action.payload;
             state.list = state.list.map((item) => {
                 if (item.id === id) {
-                    return { ...item, right: value }
+                    return { ...item, right: value };
                 } else {
                     return item;
                 }
@@ -78,16 +75,13 @@ export const listNoteSlice = createSlice({
             let latestId = 0;
             state.list.forEach((item) => {
                 if (item.id > latestId) latestId = item.id;
-            })
-            state.list = [...state.list, { id: latestId + 1, left: '', right: '' }]
+            });
+            state.list = [...state.list, { id: latestId + 1, left: '', right: '' }];
         },
-        setListNotes: (state, action: PayloadAction<ListNoteTile[]>) => {
-            state.notes = action.payload;
-        }
     },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setIsDirty, setId, setListNotes } = listNoteSlice.actions
+export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setIsDirty, setId } = listNoteSlice.actions;
 
-export default listNoteSlice.reducer
+export default listNoteSlice.reducer;

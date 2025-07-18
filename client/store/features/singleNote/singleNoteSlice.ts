@@ -6,14 +6,12 @@ export interface SingleNoteState {
     isDirty: boolean,
     term: string,
     explanation: string,
-    notes: SingleNoteTile[],
 }
 
 const initialState: SingleNoteState = {
     isDirty: false,
     term: '',
     explanation: '',
-    notes: [],
 }
 
 export const singleNoteSlice = createSlice({
@@ -32,9 +30,6 @@ export const singleNoteSlice = createSlice({
             state.explanation = action.payload;
             state.isDirty = true;
         },
-        setSingleNotes: (state, action: PayloadAction<SingleNoteTile[]>) => {
-            state.notes = action.payload;
-        },
         resetSingleNoteFields: (state) => {
             state.term = '';
             state.explanation = '';
@@ -46,6 +41,6 @@ export const singleNoteSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setTerm, setExplanation, setSingleNotes, resetSingleNoteFields, setIsDirty } = singleNoteSlice.actions
+export const { setTerm, setExplanation, resetSingleNoteFields, setIsDirty } = singleNoteSlice.actions
 
 export default singleNoteSlice.reducer

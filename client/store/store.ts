@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import {singleNoteSlice} from "@/store/features/singleNote/singleNoteSlice";
 import {listNoteSlice} from "@/store/features/listNote/listNoteSlice";
+import { remindSelectorSlice } from '@/store/features/remindSelector/remindSelectorSlice';
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             singleType: singleNoteSlice.reducer,
             listType: listNoteSlice.reducer,
+            remindSelector: remindSelectorSlice.reducer,
         },
     })
 }

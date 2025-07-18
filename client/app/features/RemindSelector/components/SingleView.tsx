@@ -23,7 +23,7 @@ export const SingleView = ({
                     const { id, term } = item;
 
                     return (
-                        <div key={id} className="item-presentation">
+                        <div key={`single-${id}`} className="item-presentation">
                             <div className="flex items-center">
                                 <span className="item-type">S</span>
                                 <span className="item-type-text">{term}</span>

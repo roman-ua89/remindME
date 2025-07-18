@@ -1,5 +1,6 @@
 // https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/generating-prisma-client
 import { PrismaClient } from "./generated/prisma/client.js";
+import * as sea from "node:sea";
 
 export const prisma = new PrismaClient();
 
@@ -37,7 +38,24 @@ export const resolvers = {
         },
         take: 10
       })
-    }
+    },
+    searchNotes: async (_, { searchTerm }) => {
+      console.log('searchTerm', searchTerm)
+      const singleNotes = await prisma.singleNote.findMany({
+        where: {
+          term: { contains: searchTerm }
+        },
+        take: 10
+      });
+      const listNotes = await prisma.listNote.findMany({
+        where: {
+          title: { contains: searchTerm }
+        },
+        take: 10
+      });
+
+      return { singleNotes, listNotes }
+    },
   },
   Mutation: {
     createMessage: async (_, { content, author }) => {
