@@ -3,13 +3,11 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import {SingleNoteTile} from "@/app/features/SingleNote/types";
 
 export interface SingleNoteState {
-    isDirty: boolean,
     term: string,
     explanation: string,
 }
 
 const initialState: SingleNoteState = {
-    isDirty: false,
     term: '',
     explanation: '',
 }
@@ -24,23 +22,18 @@ export const singleNoteSlice = createSlice({
         // immutable state based off those changes
         setTerm: (state, action: PayloadAction<string>) => {
             state.term = action.payload;
-            state.isDirty = true;
         },
         setExplanation: (state, action: PayloadAction<string>) => {
             state.explanation = action.payload;
-            state.isDirty = true;
         },
         resetSingleNoteFields: (state) => {
             state.term = '';
             state.explanation = '';
         },
-        setIsDirty: (state, action: PayloadAction<boolean>) => {
-            state.isDirty = action.payload;
-        }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setTerm, setExplanation, resetSingleNoteFields, setIsDirty } = singleNoteSlice.actions
+export const { setTerm, setExplanation, resetSingleNoteFields } = singleNoteSlice.actions
 
 export default singleNoteSlice.reducer

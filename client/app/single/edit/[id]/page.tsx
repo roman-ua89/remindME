@@ -1,5 +1,6 @@
-import {Header} from "@/app/components/Header";
-import {Form} from "../../../features/SingleNote";
+import React from 'react';
+import { Header } from '@/app/components/Header';
+import { Form } from '../../../features/SingleNote';
 
 interface PageProps {
     params: Promise<{
@@ -13,8 +14,7 @@ export default async function EditSinglePage(props: PageProps) {
     return (
         <>
             <Header />
-            <h1 className="h1">Edit single item with id: {id}</h1>
             <Form id={id} />
         </>
-    )
+    );
 }
