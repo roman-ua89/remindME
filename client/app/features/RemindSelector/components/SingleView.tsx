@@ -1,6 +1,7 @@
 import React from 'react';
 import {ActionButton, RedButton} from "@/app/shared/UI/Buttons";
 import {ISingleNoteItem, SingleNoteTile} from "@/app/features/SingleNote/types";
+import { Triangle } from "@deemlol/next-icons"
 
 interface Props {
     singleNotes: SingleNoteTile[];
@@ -17,7 +18,14 @@ export const SingleView = ({
 
     return (
         <>
-            <h1 className="h1">Single items</h1>
+            <div className="flex gap-4 justify-center mb-4 items-center">
+                <h2 className="h2 mb-0!">Single items</h2>
+                {singleNotes.length ? (
+                    <button title="Play in random order" className="block bg-gray-100 rounded-md p-2 hover:bg-blue-200 cursor-pointer">
+                        <span className="rotate-90 block"><Triangle size={26} color="#333" /></span>
+                    </button>
+                ) : null}
+            </div>
             <ul className="mb-5">
                 {singleNotes.map(item => {
                     const { id, term } = item;

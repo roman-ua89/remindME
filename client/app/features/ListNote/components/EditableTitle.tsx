@@ -1,14 +1,14 @@
-import {Edit3} from "@deemlol/next-icons";
-import React, {startTransition, useActionState, useEffect, useRef, useState} from "react";
-import {setId, setTitle} from "@/store/features/listNote/listNoteSlice";
-import {updateListNoteTitle} from "@/app/features/ListNote/actions";
-import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import { Edit3, Triangle } from '@deemlol/next-icons';
+import React, { startTransition, useActionState, useEffect, useRef, useState } from 'react';
+import { setId, setTitle } from '@/store/features/listNote/listNoteSlice';
+import { updateListNoteTitle } from '@/app/features/ListNote/actions';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 export const EditableTitle = () => {
     const dispatch = useAppDispatch();
-    const title = useAppSelector(state => state.listType.title);
-    const list = useAppSelector(state => state.listType.list);
-    const id = useAppSelector(state => state.listType.id);
+    const title = useAppSelector((state) => state.listType.title);
+    const list = useAppSelector((state) => state.listType.list);
+    const id = useAppSelector((state) => state.listType.id);
 
     const [titleEditMode, setTitleEditMode] = useState(false);
     const titleInputRef = useRef<HTMLInputElement>(null);
@@ -21,14 +21,14 @@ export const EditableTitle = () => {
         if (titleEditMode) {
             titleInputRef?.current?.focus();
         }
-    }, [titleEditMode])
+    }, [titleEditMode]);
 
     useEffect(() => {
         if (!titleEditMode && title !== titleInitialValue.current) {
             startTransition(() => {
                 updateTitleAction({ id, title: title });
                 titleInitialValue.current = title;
-            })
+            });
         }
     }, [titleEditMode]);
 
@@ -45,19 +45,19 @@ export const EditableTitle = () => {
         if (e.key === 'Enter') {
             setTitleEditMode(false);
         }
-    }
+    };
 
     const handleOnBlur = () => {
         setTitleEditMode(false);
-    }
+    };
 
     const notifyOnSave = () => {
         clearTimeout(timeoutId);
         setShowIsSaved(true);
         timeoutId = setTimeout(() => {
             setShowIsSaved(false);
-        }, 1000)
-    }
+        }, 1000);
+    };
 
     return (
         <div className="mb-4 min-h-10">
@@ -68,12 +68,13 @@ export const EditableTitle = () => {
                     className="text-2xl border-solid border-stone-200 border-2 min-w-[400px] block"
                     onInput={(e: React.ChangeEvent<HTMLInputElement>) => dispatch(setTitle(e.currentTarget.value))}
                     onBlur={handleOnBlur}
-                    onKeyDown={handleKeyDown} />
+                    onKeyDown={handleKeyDown}
+                />
             ) : (
                 <div className="flex items-start">
                     <h2 className="h2 cursor-pointer group hover:text-inherit flex items-baseline mb-0!" onClick={() => setTitleEditMode(true)}>
                         <span className="text-gray-400 pr-2 group-hover:text-gray-500">
-                            <Edit3 size={16}/>
+                            <Edit3 size={16} />
                         </span>
                         {`${title} (${list.length})`}
                         {showIsSaved && (
@@ -83,5 +84,5 @@ export const EditableTitle = () => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};

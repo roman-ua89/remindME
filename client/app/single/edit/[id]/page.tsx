@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header } from '@/app/components/Header';
-import { Form } from '../../../features/SingleNote';
+import { Form } from '@/app/features/SingleNote';
 
 interface PageProps {
     params: Promise<{
