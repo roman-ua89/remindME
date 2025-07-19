@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import {singleNoteSlice} from "@/store/features/singleNote/singleNoteSlice";
 import {listNoteSlice} from "@/store/features/listNote/listNoteSlice";
 import { remindSelectorSlice } from '@/store/features/remindSelector/remindSelectorSlice';
+import { globalSlice } from '@/store/features/global/globalSlice';
 
 export const makeStore = () => {
     return configureStore({
@@ -9,6 +10,7 @@ export const makeStore = () => {
             singleType: singleNoteSlice.reducer,
             listType: listNoteSlice.reducer,
             remindSelector: remindSelectorSlice.reducer,
+            globalState: globalSlice.reducer,
         },
     })
 }

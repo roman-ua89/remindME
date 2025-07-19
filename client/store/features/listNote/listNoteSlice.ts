@@ -81,7 +81,6 @@ export const listNoteSlice = createSlice({
     },
 });
 
-// Action creators are generated for each case reducer function
 export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setIsDirty, setId } = listNoteSlice.actions;
 
 export default listNoteSlice.reducer;

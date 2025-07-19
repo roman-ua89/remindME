@@ -4,13 +4,15 @@ import React from 'react';
 import { Header } from '@/app/components/Header';
 import { Main } from '@/app/features/RemindSelector';
 import { Search } from '@/app/features/RemindSelector/components/Search';
+import { NotificationDecorator } from '@/app/features/Notifications';
 
 export default function Home() {
     return (
-        <div>
+        <div className="relative">
             <Header />
             <Search />
             <Main />
+            <NotificationDecorator />
         </div>
     );
 }
