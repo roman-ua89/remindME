@@ -108,7 +108,6 @@ export const resolvers = {
           serializedObject
         }
       });
-
       return result;
     },
     updateListNote: async (_, { id, serializedObject }) => {

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { ListNoteItem } from '@/app/features/ListNote/types';
+import { DEFAULT_LIST_TITLE } from '@/app/shared/constants';
 
 export interface ListNoteState {
     title: string;
@@ -10,7 +11,7 @@ export interface ListNoteState {
 }
 
 const initialState: ListNoteState = {
-    title: 'Default title',
+    title: DEFAULT_LIST_TITLE,
     serializedObject: '',
     list: [],
     id: 0,

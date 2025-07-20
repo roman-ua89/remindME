@@ -1,25 +1,26 @@
 'use server';
 
 import {
-    CreatedListNoteResponse,
-    IListNoteItem,
+    CreatedListNoteResponse, CreatedListNoteReturnType, IUpdatedListNoteReturnType,
     IUpdateListNoteTitleResponse,
-    ListNoteItem,
-    UpdatedListNoteResponse
-} from "@/app/features/ListNote/types";
-import {gql, request} from "graphql-request";
-import { SERVER_URL } from "@/app/shared/graphql/client";
-import {revalidatePath} from "next/cache";
-import {redirect} from "next/navigation";
-import {IListNote} from "@/app/features/SingleNote/types";
+    ListNoteItem, ListNoteTitleProps,
+    UpdatedListNoteResponse,
+} from '@/app/features/ListNote/types';
+import { gql, request } from 'graphql-request';
+import { SERVER_URL } from '@/app/shared/graphql/client';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { IListNote } from '@/app/features/SingleNote/types';
+import { DEFAULT_LIST_ITEM } from '@/app/shared/constants';
 
-export type AddListNoteProps = {
+export type CreateListNoteProps = {
     title: string;
     data: ListNoteItem[];
-}
+};
 
-export const addListNote = async (state: { message: string }, dataToSave: AddListNoteProps) => {
+export const createListNote = async (state: { errorMessage: string }, dataToSave: CreateListNoteProps): Promise<CreatedListNoteReturnType> => {
     const { title, data } = dataToSave;
+    let newItemId = 0;
 
     const document = gql`
         mutation createListNoteItem($title: String!, $serializedObject: String!) {
@@ -37,57 +38,50 @@ export const addListNote = async (state: { message: string }, dataToSave: AddLis
             title,
             serializedObject: stringifiedData
         })
+        // TODO: get rid or serializedObj from response
         const { createListNote } = addListNoteResult;
-        console.log('createListNote', createListNote);
+        newItemId = createListNote.id;
     } catch (e) {
-        return {
-            message: 'createListNote action | something went wrong' + e
-        }
+        return { errorMessage: 'Cannot create a new List Note', createListNote: DEFAULT_LIST_ITEM }
     }
 
     revalidatePath('/');
-    redirect('/');
+    redirect(`/list/edit/${newItemId}`);
 }
 
 export type UpdateListNoteProps = {
-    id: IListNote["id"];
-    data: IListNote["serializedObject"];
-}
+    id: IListNote['id'];
+    data: IListNote['serializedObject'];
+};
 
-export const updateListNote = async (_: any, dataToSave: UpdateListNoteProps) => {
+export const updateListNote = async (state: { errorMessage: string }, dataToSave: UpdateListNoteProps): Promise<IUpdatedListNoteReturnType> => {
     const { id, data } = dataToSave;
 
     const document = gql`
-      mutation updateListNote($id: ID!, $serializedObject: String!) {
-          updateListNote(id: $id, serializedObject: $serializedObject) {
-              id
-              title
-              serializedObject
-          }
-      }
+        mutation updateListNote($id: ID!, $serializedObject: String!) {
+            updateListNote(id: $id, serializedObject: $serializedObject) {
+                id
+                title
+                serializedObject
+            }
+        }
     `;
 
     try {
         const updateResult = await request<UpdatedListNoteResponse>(SERVER_URL, document, {
             id,
-            serializedObject: data
-        })
+            serializedObject: data,
+        });
         const { updateListNote } = updateResult;
-        return updateListNote;
+        return { updateListNote, errorMessage: '' };
     } catch (e) {
-        return {
-            message: 'updateListNote action | something went wrong' + e
-        }
+        console.log(e);
+        return { errorMessage: 'Cannot update', updateListNote: DEFAULT_LIST_ITEM };
     }
-}
+};
 
-type UpdateListNoteTitleProps = {
-    id: ListNoteItem['id'];
-    title: string;
-}
 
-export const updateListNoteTitle = async (_:any, {id, title}: UpdateListNoteTitleProps) => {
-
+export const updateListNoteTitle = async (_: any, { id, title }: ListNoteTitleProps) => {
     const document = gql`
         mutation updateListNoteTitle($id: ID!, $title: String!) {
             updateListNoteTitle(id: $id, title: $title) {
@@ -100,11 +94,10 @@ export const updateListNoteTitle = async (_:any, {id, title}: UpdateListNoteTitl
     try {
         const { updateListNoteTitle } = await request<IUpdateListNoteTitleResponse>(SERVER_URL, document, {
             id,
-            title
+            title,
         });
         return updateListNoteTitle;
     } catch (e) {
         console.log('update listNoteItem', e);
     }
-
-}
+};

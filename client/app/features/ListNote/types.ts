@@ -21,8 +21,16 @@ export interface CreatedListNoteResponse {
     createListNote: IListNoteItem;
 }
 
+export interface CreatedListNoteReturnType {
+    errorMessage: string;
+}
+
 export interface UpdatedListNoteResponse {
     updateListNote: IListNoteItem;
+}
+
+export interface IUpdatedListNoteReturnType extends UpdatedListNoteResponse {
+    errorMessage: string;
 }
 
 export interface DeletedListNoteResponse {
@@ -35,3 +43,12 @@ export interface IUpdateListNoteTitleResponse {
         title: IListNoteItem["title"]
     };
 }
+
+export type FormComponentsProps = {
+    id: string;
+}
+
+export interface ListNoteTitleProps {
+    id: ListNoteItem['id'];
+    title: string;
+};
