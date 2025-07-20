@@ -3,6 +3,7 @@ import React, { startTransition, useActionState, useEffect, useRef, useState } f
 import { setId, setTitle } from '@/store/features/listNote/listNoteSlice';
 import { updateListNoteTitle } from '@/app/features/ListNote/actions';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { DEFAULT_LIST_ITEM_TITLE } from '@/app/shared/constants';
 
 export const EditableTitle = () => {
     const dispatch = useAppDispatch();
@@ -13,9 +14,9 @@ export const EditableTitle = () => {
     const [titleEditMode, setTitleEditMode] = useState(false);
     const titleInputRef = useRef<HTMLInputElement>(null);
     const [showIsSaved, setShowIsSaved] = useState(false);
-    const [updateTitleState, updateTitleAction] = useActionState(updateListNoteTitle, undefined);
+    const [{ errorMessage: updateErrorMessage, updateListNoteTitle: updatedData }, updateTitleAction] = useActionState(updateListNoteTitle, { errorMessage: '', updateListNoteTitle: DEFAULT_LIST_ITEM_TITLE });
     const titleInitialValue = useRef<string>('');
-    let timeoutId: any = null;
+    let timeoutId: number = 0;
 
     useEffect(() => {
         if (titleEditMode) {
@@ -33,13 +34,13 @@ export const EditableTitle = () => {
     }, [titleEditMode]);
 
     useEffect(() => {
-        if (updateTitleState && !updateTitleState.message) {
-            const { id, title } = updateTitleState;
+        if (!updateErrorMessage) {
+            const { id, title } = updatedData;
             dispatch(setId(id));
             dispatch(setTitle(title));
             notifyOnSave();
         }
-    }, [updateTitleState]);
+    }, [updatedData]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
@@ -54,7 +55,7 @@ export const EditableTitle = () => {
     const notifyOnSave = () => {
         clearTimeout(timeoutId);
         setShowIsSaved(true);
-        timeoutId = setTimeout(() => {
+        timeoutId = window.setTimeout(() => {
             setShowIsSaved(false);
         }, 1000);
     };

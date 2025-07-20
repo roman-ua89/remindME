@@ -44,6 +44,10 @@ export interface IUpdateListNoteTitleResponse {
     };
 }
 
+export interface IUpdateListNoteTitleReturnType extends IUpdateListNoteTitleResponse {
+    errorMessage: string;
+}
+
 export type FormComponentsProps = {
     id: string;
 }

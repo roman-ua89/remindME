@@ -2,7 +2,7 @@
 
 import {
     CreatedListNoteResponse, CreatedListNoteReturnType, IUpdatedListNoteReturnType,
-    IUpdateListNoteTitleResponse,
+    IUpdateListNoteTitleResponse, IUpdateListNoteTitleReturnType,
     ListNoteItem, ListNoteTitleProps,
     UpdatedListNoteResponse,
 } from '@/app/features/ListNote/types';
@@ -11,7 +11,7 @@ import { SERVER_URL } from '@/app/shared/graphql/client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { IListNote } from '@/app/features/SingleNote/types';
-import { DEFAULT_LIST_ITEM } from '@/app/shared/constants';
+import { DEFAULT_LIST_ITEM, DEFAULT_LIST_ITEM_TITLE } from '@/app/shared/constants';
 
 export type CreateListNoteProps = {
     title: string;
@@ -81,7 +81,7 @@ export const updateListNote = async (state: { errorMessage: string }, dataToSave
 };
 
 
-export const updateListNoteTitle = async (_: any, { id, title }: ListNoteTitleProps) => {
+export const updateListNoteTitle = async (state: { errorMessage: string }, { id, title }: ListNoteTitleProps): Promise<IUpdateListNoteTitleReturnType> => {
     const document = gql`
         mutation updateListNoteTitle($id: ID!, $title: String!) {
             updateListNoteTitle(id: $id, title: $title) {
@@ -96,8 +96,9 @@ export const updateListNoteTitle = async (_: any, { id, title }: ListNoteTitlePr
             id,
             title,
         });
-        return updateListNoteTitle;
+        return { updateListNoteTitle, errorMessage: '' };
     } catch (e) {
-        console.log('update listNoteItem', e);
+        console.log(e);
+        return { errorMessage: 'Cannot update list', updateListNoteTitle: DEFAULT_LIST_ITEM_TITLE };
     }
 };

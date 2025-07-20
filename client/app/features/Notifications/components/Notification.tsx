@@ -6,7 +6,7 @@ import { removeNotificationById } from '@/store/features/global/globalSlice';
 export const Notification = ({ variant, message, id }: INotification) => {
     const [show, setShow] = useState(true);
     const dispatch = useAppDispatch();
-    let timerId: any = null;
+    let timerId: number = 0;
 
     const hideNotification = () => {
         setShow(false);
@@ -15,7 +15,7 @@ export const Notification = ({ variant, message, id }: INotification) => {
     };
 
     useEffect(() => {
-        timerId = setTimeout(() => {
+        timerId = window.setTimeout(() => {
             setShow(false);
             dispatch(removeNotificationById(id));
 
