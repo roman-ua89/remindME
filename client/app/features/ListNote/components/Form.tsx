@@ -1,16 +1,17 @@
 'use client';
 
-import React, {startTransition, useActionState, useCallback, useEffect} from 'react';
+import React, { startTransition, useActionState, useCallback, useEffect, useRef } from 'react';
 import './../listNote.module.css';
-import {BlueButton, GreenButton} from "@/app/shared/UI/Buttons";
+import { ActionButton, BlueButton, GreenButton } from '@/app/shared/UI/Buttons';
 import {normalizeList} from "@/app/features/ListNote/utils";
 import {List} from "@/app/features/ListNote/components/List";
 import {addListNote, updateListNote} from "@/app/features/ListNote/actions";
 import {ErrorMsg} from "@/app/shared/UI/ErrorMsg";
 import {getListNoteById} from "@/app/shared/actions";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
-import {createNewRow, setId, setIsDirty, setSerializedObject, setTitle} from "@/store/features/listNote/listNoteSlice";
+import {createNewRow, setId, setSerializedObject, setTitle} from "@/store/features/listNote/listNoteSlice";
 import {EditableTitle} from "@/app/features/ListNote/components/EditableTitle";
+import { ListNoteItem } from '@/app/features/ListNote/types';
 
 type Props = {
     id?: string;
@@ -19,7 +20,6 @@ type Props = {
 export const Form = ({id}: Props) => {
     const dispatch = useAppDispatch();
     const list = useAppSelector(state => state.listType.list);
-    const isDirty = useAppSelector(state => state.listType.isDirty);
     const title = useAppSelector(state => state.listType.title);
 
     const [stateToEdit, getListNoteAction] = useActionState(getListNoteById, undefined);
@@ -27,11 +27,23 @@ export const Form = ({id}: Props) => {
     const [updateState, updateAction] = useActionState(updateListNote, { message: '' });
     const message = createState?.message || updateState?.message || '';
 
+    const initialState = useRef('');
+
+    const isDirty = () => {
+        return initialState.current !== (list.length === 0 ? '' : JSON.stringify(list)) ;
+    }
+
     useEffect(() => {
         if (id) {
             startTransition(() => {
                 getListNoteAction(id);
             })
+        }
+
+        return () => {
+            dispatch(setTitle(''));
+            dispatch(setSerializedObject(''));
+            dispatch(setId(0));
         }
     }, []);
 
@@ -41,12 +53,15 @@ export const Form = ({id}: Props) => {
             dispatch(setTitle(title));
             dispatch(setSerializedObject(serializedObject));
             dispatch(setId(id));
+
+            initialState.current = serializedObject;
         }
     }, [stateToEdit]);
 
     useEffect(() => {
         if (updateState.serializedObject) {
             dispatch(setSerializedObject(updateState.serializedObject));
+            initialState.current = updateState.serializedObject;
         }
     }, [updateState]);
 
@@ -64,7 +79,10 @@ export const Form = ({id}: Props) => {
                 });
             }
         })
-        dispatch(setIsDirty(false));
+    }
+
+    const resetOrRevertHandler = () => {
+        dispatch(setSerializedObject(initialState.current));
     }
 
     return (
@@ -74,7 +92,8 @@ export const Form = ({id}: Props) => {
             <List list={list} />
             <div className="flex flex-row gap-5">
                 <BlueButton label="Add" action={() => dispatch(createNewRow())} />
-                {isDirty && (<GreenButton label="Save" action={handleSave} />)}
+                {isDirty() && (<GreenButton label="Save" action={handleSave} />)}
+                {isDirty() && (<ActionButton action={resetOrRevertHandler} label={id ? 'Revert' : 'Reset'} />)}
             </div>
         </div>
     )

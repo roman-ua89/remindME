@@ -6,7 +6,6 @@ export interface ListNoteState {
     title: string;
     serializedObject: string;
     list: ListNoteItem[];
-    isDirty: boolean;
     id: number;
 }
 
@@ -14,7 +13,6 @@ const initialState: ListNoteState = {
     title: 'Default title',
     serializedObject: '',
     list: [],
-    isDirty: false,
     id: 0,
 };
 
@@ -34,9 +32,6 @@ export const listNoteSlice = createSlice({
         setId: (state, action: PayloadAction<number>) => {
             state.id = action.payload;
         },
-        setIsDirty: (state, action: PayloadAction<boolean>) => {
-            state.isDirty = action.payload;
-        },
         setTitle: (state, action: PayloadAction<string>) => {
             state.title = action.payload;
         },
@@ -53,7 +48,6 @@ export const listNoteSlice = createSlice({
                     return item;
                 }
             });
-            state.isDirty = true;
         },
         updateRight: (state, action: PayloadAction<UpdateRightLeft>) => {
             const { id, value } = action.payload;
@@ -64,12 +58,10 @@ export const listNoteSlice = createSlice({
                     return item;
                 }
             });
-            state.isDirty = true;
         },
         deleteRow: (state, action: PayloadAction<DeleteRowType>) => {
             const { id } = action.payload;
             state.list = state.list.filter((item) => item.id !== id);
-            state.isDirty = true;
         },
         createNewRow: (state) => {
             let latestId = 0;
@@ -81,6 +73,6 @@ export const listNoteSlice = createSlice({
     },
 });
 
-export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setIsDirty, setId } = listNoteSlice.actions;
+export const { setTitle, setSerializedObject, updateLeft, updateRight, deleteRow, createNewRow, setId } = listNoteSlice.actions;
 
 export default listNoteSlice.reducer;

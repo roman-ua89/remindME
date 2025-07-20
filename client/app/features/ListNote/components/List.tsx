@@ -19,21 +19,21 @@ export const List = ({ list }: Props) => {
                 const {left, right, id} = item;
 
                 return (
-                    <li className={`flex styles.multiple-note-line gap-5 mb-5`} key={id}>
+                    <li className={`flex styles.multiple-note-line gap-5 mb-5 items-center`} key={id}>
                         <div>{index + 1})</div>
                         <div>
                             <input
                                 type="text"
                                 onInput={(e: ChangeEvent<HTMLInputElement>) => dispatch(updateLeft({ value: e.target.value, id }))}
                                 value={left}
-                                className="border-solid border-stone-200 border-2 h-8 w-[100%] block p-2" />
+                                className="input-style w-[100%] min-w-60" />
                         </div>
                         <div>
                             <input
                                 type="text"
                                 onInput={(e: ChangeEvent<HTMLInputElement>) => dispatch(updateRight({ value: e.target.value, id }))}
                                 value={right}
-                                className="border-solid border-stone-200 border-2 h-8 w-[100%] block p-2" />
+                                className="input-style w-[100%] min-w-60" />
                         </div>
                         {list.length > 1 ? (
                             <RedButton label="Delete" action={() => dispatch(deleteRow({ id }))} />
