@@ -1,4 +1,4 @@
-import { Edit3, Triangle } from '@deemlol/next-icons';
+import { Edit3 } from '@deemlol/next-icons';
 import React, { startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import { setId, setTitle } from '@/store/features/listNote/listNoteSlice';
 import { updateListNoteTitle } from '@/app/features/ListNote/actions';
@@ -76,7 +76,8 @@ export const EditableTitle = () => {
                         <span className="text-gray-400 pr-2 group-hover:text-gray-500">
                             <Edit3 size={16} />
                         </span>
-                        {`${title} (${list.length})`}
+                        {title}
+                        <span className="text-gray-300">&nbsp;({list.length})</span>
                         {showIsSaved && (
                             <span className="ml-2 self-end p-1 rounded text-xs text-white p2 border border-green-200 bg-green-400">Saved</span>
                         )}

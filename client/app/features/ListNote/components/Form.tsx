@@ -11,7 +11,7 @@ import {getListNoteById} from "@/app/shared/actions";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {createNewRow, setId, setSerializedObject, setTitle} from "@/store/features/listNote/listNoteSlice";
 import {EditableTitle} from "@/app/features/ListNote/components/EditableTitle";
-import { ListNoteItem } from '@/app/features/ListNote/types';
+import { LIST_ITEMS_LIMIT } from '@/app/shared/constants';
 
 type Props = {
     id?: string;
@@ -90,8 +90,15 @@ export const Form = ({id}: Props) => {
             {message && (<ErrorMsg msg={message} /> )}
             <EditableTitle />
             <List list={list} />
+            <div className="flex justify-center">
+                {list.length < LIST_ITEMS_LIMIT ? (
+                    <BlueButton label="+" action={() => dispatch(createNewRow())} />
+                ) : (
+                    <span className="text-red-500">Amount of lines can&#39;t be more than {LIST_ITEMS_LIMIT}</span>
+                )}
+
+            </div>
             <div className="flex flex-row gap-5">
-                <BlueButton label="Add" action={() => dispatch(createNewRow())} />
                 {isDirty() && (<GreenButton label="Save" action={handleSave} />)}
                 {isDirty() && (<ActionButton action={resetOrRevertHandler} label={id ? 'Revert' : 'Reset'} />)}
             </div>
