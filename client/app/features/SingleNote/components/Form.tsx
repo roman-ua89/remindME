@@ -8,6 +8,8 @@ import { getSingleNoteById } from '@/app/shared/actions';
 import { ErrorMsg } from '@/app/shared/UI/ErrorMsg';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setTerm, setExplanation, resetSingleNoteFields } from '@/store/features/singleNote/singleNoteSlice';
+import { SymbolCounter } from '@/app/components/SymbolCounter';
+import { TEXT_AREA_LIMIT, TEXT_INPUT_LIMIT } from '@/app/shared/constants';
 
 type Props = {
     id?: string;
@@ -102,22 +104,24 @@ export const Form = ({ id }: Props) => {
                 <div className="flex justify-between gap-10">
                     <div className="grow">
                         <div>
-                            <h2>Terminology</h2>
+                            <h3 className="h3 flex">Terminology <SymbolCounter strLength={term.length} max={TEXT_INPUT_LIMIT} /></h3>
                             <input
                                 name="term"
                                 onInput={onTermInputChange}
                                 value={term}
-                                className="border-solid border-stone-200 border-2 h-8 w-[100%] block p-2"
+                                className="input-style w-[100%]"
+                                disabled={term.length >= TEXT_INPUT_LIMIT}
                             />
                         </div>
                     </div>
                     <div className="grow">
-                        <h2>Explanation</h2>
+                        <h3 className="h3 flex">Explanation <SymbolCounter strLength={explanation.length} max={TEXT_AREA_LIMIT} /></h3>
                         <textarea
                             name="explanation"
                             value={explanation}
                             onInput={onExplanationInputChange}
-                            className="border-stone-200 border-solid block border-2 resize-none w-[100%] p-2 min-h-30"
+                            className="text-area-style w-[100%]"
+                            disabled={explanation.length >= TEXT_AREA_LIMIT}
                         />
                     </div>
                 </div>
