@@ -49,6 +49,22 @@ body {
     @apply border-solid border-gray-200 border-4 rounded-lg h-12 p-2 block;
 }
 
+.form-line {
+    @apply mb-4;
+}
+
+.form-label {
+    @apply block text-gray-500 text-base mb-1;
+}
+
+.label-style {
+    @apply block mb-2 font-bold text-gray-600;
+}
+
 .text-area-style {
     @apply border-solid border-gray-200 border-4 rounded-lg p-2 resize-none block  min-h-40;
+}
+
+.account-links {
+    @apply underline hover:no-underline text-gray-500 text-sm;
 }

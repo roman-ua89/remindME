@@ -4,3 +4,4 @@ export const LIST_ITEMS_LIMIT = 30;
 export const DEFAULT_LIST_TITLE = 'Default title';
 export const DEFAULT_LIST_ITEM = { id: 0, title: '', serializedObject: '' }
 export const DEFAULT_LIST_ITEM_TITLE = { id: 0, title: '' }
+export const MODAL_WINDOW_CONTAINER_ID = 'modal-window-container';

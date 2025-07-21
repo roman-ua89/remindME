@@ -45,7 +45,7 @@ export const Search = () => {
         <div className="mb-8">
             <div className="max-w-sm relative mx-auto">
                 <input
-                    className="border-solid border-stone-200 border-1 rounded-lg h-12 w-[100%] block py-2 pl-3 pr-10"
+                    className="input-style w-[100%] pl-3 pr-10"
                     value={searchValue}
                     onInput={onInputHandler}
                     type="text"
