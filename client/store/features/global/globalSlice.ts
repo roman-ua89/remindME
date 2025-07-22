@@ -3,11 +3,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface IGlobalState {
     notifications: INotification[];
+    isRegisterFormVisible: boolean;
+    isLoginFormVisible: boolean;
 }
 
 const initialState: IGlobalState = {
     notifications: [],
-}
+    isRegisterFormVisible: false,
+    isLoginFormVisible: false,
+};
 
 export const globalSlice = createSlice({
     name: 'globalSlice',
@@ -16,12 +20,18 @@ export const globalSlice = createSlice({
         setNotification(state, action: PayloadAction<INotification>) {
             state.notifications = [...state.notifications, action.payload];
         },
-        removeNotificationById(state, action: PayloadAction<INotification["id"]>) {
-            state.notifications = state.notifications.filter(item => item.id !== action.payload);
-        }
-    }
-})
+        removeNotificationById(state, action: PayloadAction<INotification['id']>) {
+            state.notifications = state.notifications.filter((item) => item.id !== action.payload);
+        },
+        setIsRegisterFormVisible(state, action: PayloadAction<boolean>) {
+            state.isRegisterFormVisible = action.payload;
+        },
+        setIsLoginFormVisible(state, action: PayloadAction<boolean>) {
+            state.isLoginFormVisible = action.payload;
+        },
+    },
+});
 
-export const { setNotification, removeNotificationById } = globalSlice.actions;
+export const { setNotification, removeNotificationById, setIsRegisterFormVisible, setIsLoginFormVisible } = globalSlice.actions;
 
 export default globalSlice.reducer;
