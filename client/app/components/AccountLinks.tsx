@@ -7,8 +7,8 @@ import { setIsLoginFormVisible } from '@/store/features/global/globalSlice';
 export const AccountLinks = () => {
     const isLoginFormVisible = useAppSelector((state) => state.globalState.isLoginFormVisible);
     const isRegisterFormVisible = useAppSelector((state) => state.globalState.isRegisterFormVisible);
+    const isLoggedIn = useAppSelector((state) => state.globalState.isLoggedIn);
     const dispatch = useAppDispatch();
-    const isLoggedIn = false;
 
     const showLoginFormHandler = () => {
         dispatch(setIsLoginFormVisible(true));

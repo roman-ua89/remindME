@@ -5,12 +5,14 @@ interface IGlobalState {
     notifications: INotification[];
     isRegisterFormVisible: boolean;
     isLoginFormVisible: boolean;
+    isLoggedIn: boolean;
 }
 
 const initialState: IGlobalState = {
     notifications: [],
     isRegisterFormVisible: false,
     isLoginFormVisible: false,
+    isLoggedIn: false,
 };
 
 export const globalSlice = createSlice({
@@ -29,9 +31,12 @@ export const globalSlice = createSlice({
         setIsLoginFormVisible(state, action: PayloadAction<boolean>) {
             state.isLoginFormVisible = action.payload;
         },
+        setIsLoggedIn(state, action: PayloadAction<boolean>) {
+            state.isLoggedIn = action.payload;
+        }
     },
 });
 
-export const { setNotification, removeNotificationById, setIsRegisterFormVisible, setIsLoginFormVisible } = globalSlice.actions;
+export const { setNotification, removeNotificationById, setIsRegisterFormVisible, setIsLoginFormVisible, setIsLoggedIn } = globalSlice.actions;
 
 export default globalSlice.reducer;
