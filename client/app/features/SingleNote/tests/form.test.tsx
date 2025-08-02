@@ -1,23 +1,31 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, prettyDOM } from '@testing-library/react';
 import React from 'react';
 import { renderWithProviders } from '@/app/utils/test-utils';
 import { Form } from '@/app/features/SingleNote';
 import { request, gql } from 'graphql-request';
 import { userEvent } from '@testing-library/user-event';
+import { getSingleNoteById } from '@/app/shared/actions';
 
 jest.mock('graphql-request', () => ({
     request: jest.fn(), // Mock the request function
     gql: jest.fn(),
 }));
 
-describe.only('Create Single Note component', () => {
+jest.mock('@/app/shared/actions', () => ({
+    ...jest.requireActual('@/app/shared/actions'),
+    getSingleNoteById: jest.fn()
+}));
+
+describe('Create Single Note component', () => {
     const mockRequest = request as jest.Mock;
     const mockGql = gql as jest.Mock;
+    const mockGetNoteById = getSingleNoteById as jest.Mock;
 
     beforeEach(() => {
         // Reset mocks before each test to ensure isolation
         mockRequest.mockReset();
         mockGql.mockReset();
+        mockGetNoteById.mockReset();
     });
 
     it('Should show text input and textarea', () => {
@@ -78,5 +86,27 @@ describe.only('Create Single Note component', () => {
         expect(textInput).toHaveTextContent('');
         expect(textarea).toHaveTextContent('');
         expect(screen.queryByRole('button', { name: 'Reset' })).not.toBeInTheDocument();
+    });
+
+    test('Edit mode. Text fields should not be empty', async () => {
+        const mockData = { id: 2, term: 'some term', explanation: 'some explanation' };
+
+        mockGetNoteById.mockImplementation(() => {
+            return mockData;
+        })
+
+        renderWithProviders(<Form id="1" />);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const textInput = screen.getByRole('textbox', { name: /Terminology/i });
+        const textarea = screen.getByRole('textbox', { name: /Explanation/i });
+        const saveBtn = screen.getByRole('button', { name: 'Save' });
+        const resetBtn = screen.queryByRole('button', { name: 'Reset' });
+
+        expect(textInput).toHaveValue(mockData.term);
+        expect(textarea).toHaveValue(mockData.explanation);
+        expect(saveBtn).toBeDisabled();
+        expect(resetBtn).not.toBeInTheDocument();
+
     });
 });
