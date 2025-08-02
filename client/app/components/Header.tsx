@@ -10,8 +10,7 @@ export const Header = () => {
             <AccountLinks />
             <div className="flex justify-center">
                 <h1 className="font-bold text-lime-600 text-[60px]">
-                    Remind
-                    <span>ME</span>
+                    RemindME
                 </h1>
             </div>
             <Menu />

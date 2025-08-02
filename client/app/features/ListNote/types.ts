@@ -51,7 +51,7 @@ export interface IUpdateListNoteTitleReturnType extends IUpdateListNoteTitleResp
 }
 
 export type FormComponentsProps = {
-    id: string;
+    id?: string;
 }
 
 export interface ListNoteTitleProps {

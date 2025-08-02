@@ -3,6 +3,7 @@ import { ModalWindow } from '@/app/components/ModalWindow';
 import { LoginForm, RegisterForm } from '@/app/features/LoginRegister';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setIsLoginFormVisible } from '@/store/features/global/globalSlice';
+import Link from 'next/link';
 
 export const AccountLinks = () => {
     const isLoginFormVisible = useAppSelector((state) => state.globalState.isLoginFormVisible);
@@ -20,14 +21,14 @@ export const AccountLinks = () => {
                 {isLoggedIn ? (
                     <>
                         <li>
-                            <a href="#" className="account-links">
+                            <Link href="#" className="account-links">
                                 Logout
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="#" className="account-links">
+                            <Link href="/account" className="account-links">
                                 Account
-                            </a>
+                            </Link>
                         </li>
                     </>
                 ) : (

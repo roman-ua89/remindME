@@ -1,4 +1,4 @@
-import { screen, fireEvent, prettyDOM } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { renderWithProviders } from '@/app/utils/test-utils';
 import { Form } from '@/app/features/SingleNote';
@@ -95,7 +95,7 @@ describe('Create Single Note component', () => {
             return mockData;
         })
 
-        renderWithProviders(<Form id="1" />);
+        renderWithProviders(<Form id={1} />);
         await new Promise((resolve) => setTimeout(resolve, 0));
 
         const textInput = screen.getByRole('textbox', { name: /Terminology/i });

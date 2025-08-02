@@ -12,7 +12,7 @@ const initialState: IGlobalState = {
     notifications: [],
     isRegisterFormVisible: false,
     isLoginFormVisible: false,
-    isLoggedIn: false,
+    isLoggedIn: true,
 };
 
 export const globalSlice = createSlice({
