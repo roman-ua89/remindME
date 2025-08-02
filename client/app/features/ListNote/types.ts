@@ -7,6 +7,8 @@ export interface IListNoteItem {
 
 export type ListNoteTile = Pick<IListNoteItem, 'id' | 'title'>;
 
+export type UpdateListSerializedObject = Pick<IListNoteItem, 'id' | 'serializedObject'>;
+
 export type ListNoteItem = {
     id: number;
     left: string;

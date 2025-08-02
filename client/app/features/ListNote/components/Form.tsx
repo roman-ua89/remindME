@@ -71,7 +71,7 @@ export const Form = ({ id = '' }: FormComponentsProps) => {
         const normalizedData = memoizedNormalizeList(list);
         startTransition(() => {
             if (id) {
-                updateAction({ id: parseInt(id), data: JSON.stringify(normalizedData) });
+                updateAction({ id: parseInt(id), serializedObject: JSON.stringify(normalizedData) });
             } else {
                 createAction({
                     title,

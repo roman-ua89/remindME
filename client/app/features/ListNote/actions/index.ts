@@ -4,7 +4,7 @@ import {
     CreatedListNoteResponse, CreatedListNoteReturnType, IUpdatedListNoteReturnType,
     IUpdateListNoteTitleResponse, IUpdateListNoteTitleReturnType,
     ListNoteItem, ListNoteTitleProps,
-    UpdatedListNoteResponse,
+    UpdatedListNoteResponse, UpdateListSerializedObject,
 } from '@/app/features/ListNote/types';
 import { gql, request } from 'graphql-request';
 import { SERVER_URL } from '@/app/shared/graphql/client';
@@ -42,20 +42,15 @@ export const createListNote = async (state: { errorMessage: string }, dataToSave
         const { createListNote } = addListNoteResult;
         newItemId = createListNote.id;
     } catch (e) {
-        return { errorMessage: 'Cannot create a new List Note', createListNote: DEFAULT_LIST_ITEM }
+        return { errorMessage: 'Cannot create a new List Note' + e }
     }
 
     revalidatePath('/');
     redirect(`/list/edit/${newItemId}`);
 }
 
-export type UpdateListNoteProps = {
-    id: IListNote['id'];
-    data: IListNote['serializedObject'];
-};
-
-export const updateListNote = async (state: { errorMessage: string }, dataToSave: UpdateListNoteProps): Promise<IUpdatedListNoteReturnType> => {
-    const { id, data } = dataToSave;
+export const updateListNote = async (state: { errorMessage: string }, dataToSave: UpdateListSerializedObject): Promise<IUpdatedListNoteReturnType> => {
+    const { id, serializedObject } = dataToSave;
 
     const document = gql`
         mutation updateListNote($id: ID!, $serializedObject: String!) {
@@ -70,7 +65,7 @@ export const updateListNote = async (state: { errorMessage: string }, dataToSave
     try {
         const updateResult = await request<UpdatedListNoteResponse>(SERVER_URL, document, {
             id,
-            serializedObject: data,
+            serializedObject,
         });
         const { updateListNote } = updateResult;
         return { updateListNote, errorMessage: '' };
