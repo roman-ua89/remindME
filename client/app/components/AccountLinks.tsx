@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ModalWindow } from '@/app/components/ModalWindow';
 import { LoginForm, RegisterForm } from '@/app/features/LoginRegister';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';

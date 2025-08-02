@@ -3,9 +3,10 @@ import React from 'react';
 type Props = {
     strLength: number;
     max: number;
+    ariaLabel?: string;
 }
 
-export const SymbolCounter = ({strLength, max}: Props ) => {
+export const SymbolCounter = ({strLength, max, ariaLabel}: Props ) => {
     const defaultColor = 'text-green-300';
     const warningColor = 'text-yellow-300';
     const errorColor = 'text-red-400';
@@ -24,6 +25,6 @@ export const SymbolCounter = ({strLength, max}: Props ) => {
     }
 
     return (
-        <div className={`${color} pl-2`}>{strLength}</div>
+        <div aria-label={ariaLabel} className={`${color} pl-2`}>{strLength}</div>
     )
 }

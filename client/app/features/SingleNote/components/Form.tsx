@@ -30,7 +30,7 @@ export const Form = ({ id }: Props) => {
 
     const isDirty = useCallback(() => {
         return initialValues.current.term !== term || initialValues.current.explanation !== explanation;
-    }, [term, explanation])
+    }, [term, explanation]);
 
     const [state, createSingleNoteAction] = useActionState(createSingleNote, { message: '' });
     const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined);
@@ -86,16 +86,16 @@ export const Form = ({ id }: Props) => {
 
     const onTermInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         dispatch(setTerm(e.target.value));
-    }
+    };
 
     const onExplanationInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         dispatch(setExplanation(e.target.value));
-    }
+    };
 
     const revertFormHandler = () => {
         dispatch(setTerm(initialValues.current.term));
         dispatch(setExplanation(initialValues.current.explanation));
-    }
+    };
 
     return (
         <>
@@ -104,10 +104,13 @@ export const Form = ({ id }: Props) => {
                 <div className="flex justify-between gap-10">
                     <div className="grow">
                         <div>
-                            <h3 className="h3 flex">Terminology <SymbolCounter strLength={term.length} max={TEXT_INPUT_LIMIT} /></h3>
+                            <h3 id="term-label" className="h3 flex">
+                                Terminology <SymbolCounter ariaLabel="Term symbol counter" strLength={term.length} max={TEXT_INPUT_LIMIT} />
+                            </h3>
                             <input
+                                aria-labelledby="term-label"
                                 name="term"
-                                onInput={onTermInputChange}
+                                onChange={onTermInputChange}
                                 value={term}
                                 className="input-style w-[100%]"
                                 disabled={term.length >= TEXT_INPUT_LIMIT}
@@ -115,19 +118,22 @@ export const Form = ({ id }: Props) => {
                         </div>
                     </div>
                     <div className="grow">
-                        <h3 className="h3 flex">Explanation <SymbolCounter strLength={explanation.length} max={TEXT_AREA_LIMIT} /></h3>
+                        <h3 id="explanation-label" className="h3 flex">
+                            Explanation <SymbolCounter ariaLabel="Explanation symbol counter" strLength={explanation.length} max={TEXT_AREA_LIMIT} />
+                        </h3>
                         <textarea
+                            aria-labelledby="explanation-label"
                             name="explanation"
                             value={explanation}
-                            onInput={onExplanationInputChange}
+                            onChange={onExplanationInputChange}
                             className="text-area-style w-[100%]"
                             disabled={explanation.length >= TEXT_AREA_LIMIT}
                         />
                     </div>
                 </div>
                 <div className="flex gap-4">
-                    <BlueButton disabled={(!explanation || !term) || !isDirty()} label="Save" />
-                    {isDirty() ? (<ActionButton label={id ? 'Revert' : 'Reset'} action={revertFormHandler} />) : null}
+                    <BlueButton disabled={!explanation || !term || !isDirty()} label="Save" />
+                    {isDirty() ? <ActionButton label={id ? 'Revert' : 'Reset'} action={revertFormHandler} /> : null}
                 </div>
             </form>
         </>
