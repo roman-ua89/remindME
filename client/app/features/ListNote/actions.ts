@@ -10,7 +10,6 @@ import { gql, request } from 'graphql-request';
 import { SERVER_URL } from '@/app/shared/graphql/client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { IListNote } from '@/app/features/SingleNote/types';
 import { DEFAULT_LIST_ITEM, DEFAULT_LIST_ITEM_TITLE } from '@/app/shared/constants';
 
 export type CreateListNoteProps = {
