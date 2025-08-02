@@ -9,10 +9,10 @@ import { ErrorMsg } from '@/app/shared/UI/ErrorMsg';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setTerm, setExplanation, resetSingleNoteFields } from '@/store/features/singleNote/singleNoteSlice';
 import { SymbolCounter } from '@/app/components/SymbolCounter';
-import { TEXT_AREA_LIMIT, TEXT_INPUT_LIMIT } from '@/app/shared/constants';
+import { DEFAULT_SINGLE_ITEM, TEXT_AREA_LIMIT, TEXT_INPUT_LIMIT } from '@/app/shared/constants';
 
 type Props = {
-    id?: string;
+    id?: number;
 };
 
 // if 'id' is defined
@@ -32,10 +32,13 @@ export const Form = ({ id }: Props) => {
         return initialValues.current.term !== term || initialValues.current.explanation !== explanation;
     }, [term, explanation]);
 
-    const [state, createSingleNoteAction] = useActionState(createSingleNote, { message: '' });
+    const [{ errorMessage: createErrorMessage }, createSingleNoteAction] = useActionState(createSingleNote, { errorMessage: '' });
     const [stateToEdit, getNoteById] = useActionState(getSingleNoteById, undefined);
-    const [stateUpdated, updateSingleNoteAction] = useActionState(updateSingleNote, { message: '' });
-    const { message } = state;
+    const [{ errorMessage: updateErrorMessage, updateSingleNote: updatedData }, updateSingleNoteAction] = useActionState(updateSingleNote, {
+        updateSingleNote: DEFAULT_SINGLE_ITEM,
+        errorMessage: ''
+    });
+    const message = updateErrorMessage || createErrorMessage || '';
 
     useEffect(() => {
         if (id) {
@@ -60,26 +63,23 @@ export const Form = ({ id }: Props) => {
     }, [stateToEdit]);
 
     useEffect(() => {
-        if (stateUpdated.term && stateUpdated.explanation) {
-            dispatch(setTerm(stateUpdated.term));
-            dispatch(setExplanation(stateUpdated.explanation));
+        const { term, explanation } = updatedData;
+        if (term && explanation) {
+            dispatch(setTerm(term));
+            dispatch(setExplanation(explanation));
 
-            initialValues.current.term = stateUpdated.term;
-            initialValues.current.explanation = stateUpdated.explanation;
+            initialValues.current.term = term;
+            initialValues.current.explanation = explanation;
         }
-    }, [stateUpdated]);
+    }, [updatedData]);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         startTransition(() => {
-            const formData = new FormData();
-            formData.append('term', term);
-            formData.append('explanation', explanation);
             if (id) {
-                formData.append('id', id);
-                updateSingleNoteAction(formData);
+                updateSingleNoteAction({ id, term, explanation });
             } else {
-                createSingleNoteAction(formData);
+                createSingleNoteAction({ term, explanation });
             }
         });
     };

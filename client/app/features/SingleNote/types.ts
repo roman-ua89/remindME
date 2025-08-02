@@ -5,7 +5,9 @@ export interface ISingleNoteItem {
     explanation: string;
 }
 
-export type SingleNoteTile = Pick<ISingleNoteItem, 'id' | 'term'>
+export type SingleNoteTile = Pick<ISingleNoteItem, 'id' | 'term'>;
+
+export type CreateSingleNoteProps = Pick<ISingleNoteItem, 'term' | 'explanation'>;
 
 export interface ISingleNoteTileResponse {
     singleNotes: SingleNoteTile[];
@@ -15,6 +17,7 @@ export interface ISingleNoteResponse {
     singleNoteById: ISingleNoteItem;
 }
 
+// TODO: move to ListNote feature
 export interface IListNote {
     id: number;
     title: string;
@@ -29,8 +32,16 @@ export interface ICreateSingleNoteResponse {
     createSingleNote: ISingleNoteItem;
 }
 
-export interface IEditSingleNoteResponse {
+export interface ICreateSingleNoteReturnType {
+    errorMessage: string;
+}
+
+export interface IUpdateSingleNoteResponse {
     updateSingleNote: ISingleNoteItem;
+}
+
+export interface IUpdateSingleNoteReturnType extends IUpdateSingleNoteResponse {
+    errorMessage: string;
 }
 
 export interface IDeleteSingleNoteResponse {

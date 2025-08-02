@@ -75,8 +75,7 @@ export const updateListNote = async (state: { errorMessage: string }, dataToSave
         const { updateListNote } = updateResult;
         return { updateListNote, errorMessage: '' };
     } catch (e) {
-        console.log(e);
-        return { errorMessage: 'Cannot update', updateListNote: DEFAULT_LIST_ITEM };
+        return { errorMessage: `Cannot update: ${e}`, updateListNote: DEFAULT_LIST_ITEM };
     }
 };
 

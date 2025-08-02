@@ -6,15 +6,14 @@ import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 import {
     ICreateSingleNoteResponse,
-    IEditSingleNoteResponse,
+    IUpdateSingleNoteResponse,
     ISingleNoteItem,
-    ISingleNoteResponse
-} from "@/app/features/SingleNote/types";
-import {IActionMessage} from "@/app/shared/types/types";
+    IUpdateSingleNoteReturnType, CreateSingleNoteProps, ICreateSingleNoteReturnType,
+} from '@/app/features/SingleNote/types';
+import { DEFAULT_SINGLE_ITEM } from '@/app/shared/constants';
 
-export const createSingleNote = async (state: { message: string }, formData: FormData) => {
-    const term = formData.get('term');
-    const explanation = formData.get('explanation');
+export const createSingleNote = async (state: { errorMessage: string }, dataToSave: CreateSingleNoteProps): Promise<ICreateSingleNoteReturnType> => {
+    const { term, explanation } = dataToSave;
     let newItemId = 0;
 
     const document = gql`
@@ -35,18 +34,14 @@ export const createSingleNote = async (state: { message: string }, formData: For
 
       newItemId = result.createSingleNote.id;
     } catch (e) {
-        return {
-            message: 'addSingleNote action | something went wrong' + e
-        }
+        return { errorMessage: 'addSingleNote action | something went wrong' + e }
     }
     revalidatePath('/');
     redirect(`/single/edit/${newItemId}`);
 }
 
-export const updateSingleNote = async (_: any, formData: FormData):Promise<ISingleNoteItem | IActionMessage> => {
-    const term = formData.get('term');
-    const explanation = formData.get('explanation');
-    const id = formData.get('id');
+export const updateSingleNote = async (state: { errorMessage: string }, dataToSave: ISingleNoteItem):Promise<IUpdateSingleNoteReturnType> => {
+    const { id, term, explanation } = dataToSave;
 
     const document = gql`
         mutation updateSingleNote($id: ID!, $term: String!, $expl: String!) {
@@ -59,16 +54,15 @@ export const updateSingleNote = async (_: any, formData: FormData):Promise<ISing
     `;
 
     try {
-        const result = await request<IEditSingleNoteResponse>(SERVER_URL, document, {
+        const result = await request<IUpdateSingleNoteResponse>(SERVER_URL, document, {
             term: term,
             expl: explanation,
             id
         });
+        const { updateSingleNote } = result;
 
-        return result.updateSingleNote;
+        return { updateSingleNote, errorMessage: '' };
     } catch (e) {
-        return {
-            message: 'updateSingleNote action | something went wrong' + e
-        }
+        return { errorMessage: `Can not update Single Note: ${e}`, updateSingleNote: DEFAULT_SINGLE_ITEM }
     }
 }
