@@ -1,7 +1,6 @@
 // https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/generating-prisma-client
 import { PrismaClient } from "./generated/prisma/client.js";
-import * as sea from "node:sea";
-
+import {getLatestId, isTagUnique, removeTag} from "./utils/utils.js";
 export const prisma = new PrismaClient();
 
 export const resolvers = {
@@ -55,6 +54,11 @@ export const resolvers = {
       });
 
       return { singleNotes, listNotes }
+    },
+    getUser: async (_, { id }) => {
+      await prisma.users.findUnique({ // return?
+        where: { id: Number(id) },
+      });
     },
   },
   Mutation: {
@@ -144,6 +148,62 @@ export const resolvers = {
         }
       })
       return result;
-    }
+    },
+    createUser: async (_, { email, password }) => {
+      return await prisma.users.create({
+        data: { email, password },
+      });
+    },
+    updateTags: async (_, { id, tag, tagAction }) => {
+      let resultArr = [];
+      const { tags: savedTags } = await prisma.users.findUnique({
+        where: { id: parseInt(id) },
+        select: {
+          tags: true
+        }
+      });
+
+      switch(tagAction) {
+        case 'delete':
+          const serializedArr = JSON.parse(savedTags);
+          const filteredArr = removeTag({ originalArr: serializedArr, tag });
+          resultArr = [...filteredArr];
+          break;
+
+        case 'update':
+          if (!savedTags) {
+            resultArr.push({ id: 1, title: tag });
+          } else {
+            const serializedArr = JSON.parse(savedTags);
+            if (isTagUnique({ originalArr: serializedArr, newTag: tag })) {
+              const latestId = getLatestId(serializedArr);
+              resultArr = [...serializedArr, { id: latestId + 1, title: tag }];
+            } else {
+              // this scenario cna be handled on FE
+              resultArr = [...serializedArr];
+            }
+          }
+          break;
+
+        default:
+          throw new Error('Invalid tagAction');
+      }
+
+      return prisma.users.update({
+        where: { id: parseInt(id) },
+        data: {
+          tags: resultArr.length ? JSON.stringify(resultArr) : '',
+        }
+      })
+    },
+    updateUser: async (_, { id, password, name, totalScore }) => {
+
+    },
+    deleteUser: async (_, { id }) => {
+      await prisma.users.delete({
+        where: { id: Number(id) },
+      });
+      return true;
+    },
   },
 }

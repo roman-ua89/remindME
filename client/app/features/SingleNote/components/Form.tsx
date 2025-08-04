@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setTerm, setExplanation, resetSingleNoteFields } from '@/store/features/singleNote/singleNoteSlice';
 import { SymbolCounter } from '@/app/components/SymbolCounter';
 import { DEFAULT_SINGLE_ITEM, TEXT_AREA_LIMIT, TEXT_INPUT_LIMIT } from '@/app/shared/constants';
+import { TagSelector } from '@/app/features/TagSelector';
 
 type Props = {
     id?: number;
@@ -131,6 +132,7 @@ export const Form = ({ id }: Props) => {
                         />
                     </div>
                 </div>
+                <TagSelector />
                 <div className="flex gap-4">
                     <BlueButton disabled={!explanation || !term || !isDirty()} label="Save" />
                     {isDirty() ? <ActionButton label={id ? 'Revert' : 'Reset'} action={revertFormHandler} /> : null}

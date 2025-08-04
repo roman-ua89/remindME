@@ -5,6 +5,7 @@ type Query {
     listNoteById(id: ID!): ListNote
     listNotes: [ListNote]!
     searchNotes(searchTerm: String!): SearchResults!
+    getUser(id: ID!): User
 }
 
 type Mutation {
@@ -17,6 +18,11 @@ type Mutation {
     updateListNote(id: ID!, serializedObject: String!): ListNote!
     updateListNoteTitle(id: ID!, title: String!): ListNoteTitle!
     deleteListNoteById(id: ID!): [ListNoteTitle]!
+
+    createUser(email: String!, password: String!): User
+    updateUser(id: ID!, password: String, name: String, totalScore: Int): User
+    updateTags(id: ID!, tag: String, tagAction: TagActionType): User
+    deleteUser(id: ID!): Boolean
 }
 
 type Message {
@@ -50,4 +56,18 @@ type SingleNoteTitle {
 type SearchResults {
     singleNotes: [SingleNoteTitle!]!
     listNotes: [ListNoteTitle!]!
+}
+
+type User {
+    id: ID!
+    password: String
+    email: String
+    name: String
+    totalScore: Int
+    tags: String
+}
+
+enum TagActionType {
+    delete
+    update
 }

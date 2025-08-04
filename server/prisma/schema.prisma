@@ -22,10 +22,21 @@ model SingleNote {
   id      Int     @id @default(autoincrement())
   term    String
   explanation String
+  tag     Int?
 }
 
 model ListNote {
   id      Int     @id @default(autoincrement())
   title   String
   serializedObject  String
+  tag     Int?
+}
+
+model Users {
+  id      Int     @id @default(autoincrement())
+  password String
+  email   String
+  name    String?
+  totalScore Int? @default(0)
+  tags    String? @default("")
 }

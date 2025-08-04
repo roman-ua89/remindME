@@ -1,11 +1,13 @@
 import { INotification } from '@/app/features/Notifications';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ITag } from '@/app/shared/types/types';
 
 interface IGlobalState {
     notifications: INotification[];
     isRegisterFormVisible: boolean;
     isLoginFormVisible: boolean;
     isLoggedIn: boolean;
+    tags: ITag[];
 }
 
 const initialState: IGlobalState = {
@@ -13,6 +15,7 @@ const initialState: IGlobalState = {
     isRegisterFormVisible: false,
     isLoginFormVisible: false,
     isLoggedIn: true,
+    tags: [],
 };
 
 export const globalSlice = createSlice({
@@ -33,10 +36,14 @@ export const globalSlice = createSlice({
         },
         setIsLoggedIn(state, action: PayloadAction<boolean>) {
             state.isLoggedIn = action.payload;
-        }
+        },
+        setTags(state, action: PayloadAction<ITag[]>) {
+            state.tags = action.payload;
+        },
     },
 });
 
-export const { setNotification, removeNotificationById, setIsRegisterFormVisible, setIsLoginFormVisible, setIsLoggedIn } = globalSlice.actions;
+export const { setNotification, removeNotificationById, setIsRegisterFormVisible, setIsLoginFormVisible, setIsLoggedIn, setTags } =
+    globalSlice.actions;
 
 export default globalSlice.reducer;
