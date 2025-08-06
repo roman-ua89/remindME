@@ -4,7 +4,7 @@ import React, { useState, useEffect, startTransition } from 'react';
 import { Chip, Stack, Divider } from '@mui/material';
 import { GreenButton } from '@/app/shared/UI/Buttons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { ITag } from '@/app/features/TagSelector/types';
+import { ICreateNewTagProps, ITag, IUpdateTagsReturnType } from '@/app/features/TagSelector/types';
 import { getUserData } from '@/app/shared/actions';
 import { setNotification, setTags } from '@/store/features/global/globalSlice';
 import { TEMP_USER_ID } from '@/app/shared/constants';
@@ -27,23 +27,35 @@ export const TagSelector = () => {
         })
     }, []);
 
+    const handleDataUpdate = (result: IUpdateTagsReturnType, actionType: ICreateNewTagProps['actionType']) => {
+        const { errorMessage, updateTags } = result;
+        if (errorMessage) {
+            dispatch(setNotification({
+                id: `${actionType}-operation-error`,
+                variant: 'error',
+                message: errorMessage
+            }))
+        } else if (updateTags.length) {
+            dispatch(setTags(updateTags));
+        }
+    }
+
     const deleteActionHandler = ({ id }: { id: ITag['id'] }) => {
-        console.log('delete with id: ', id);
+        const actionType = 'delete';
+
+        startTransition(() => {
+            updateTags({ userId: TEMP_USER_ID, actionType, tagId: id }).then(result => {
+                handleDataUpdate(result, actionType);
+            })
+        })
     };
 
     const updateActionHandler = () => {
+        const actionType = 'update';
+
         startTransition(() => {
-            updateTags({ title: inputValue, userId: TEMP_USER_ID }).then(result => {
-                const { errorMessage, updateTags } = result;
-                if (errorMessage) {
-                    dispatch(setNotification({
-                        id: 'cannot-add-tag',
-                        variant: 'error',
-                        message: errorMessage
-                    }))
-                } else if (updateTags.length) {
-                    dispatch(setTags(updateTags));
-                }
+            updateTags({ title: inputValue, userId: TEMP_USER_ID, actionType }).then(result => {
+                handleDataUpdate(result, actionType);
                 setInputValue('');
             })
         })

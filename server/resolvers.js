@@ -39,7 +39,6 @@ export const resolvers = {
       })
     },
     searchNotes: async (_, { searchTerm }) => {
-      console.log('searchTerm', searchTerm)
       const singleNotes = await prisma.singleNote.findMany({
         where: {
           term: { contains: searchTerm }
@@ -154,22 +153,19 @@ export const resolvers = {
         data: { email, password },
       });
     },
-    updateTags: async (_, { id, tag, tagAction }) => {
-      console.log('id', id);
-      console.log('tag', tag)
-      console.log('tagAction', tagAction)
+    updateTags: async (_, { userId, tagId, tag, actionType }) => {
       let resultArr = [];
       const { tags: savedTags } = await prisma.users.findUnique({
-        where: { id: parseInt(id) },
+        where: { id: parseInt(userId) },
         select: {
           tags: true
         }
       });
 
-      switch(tagAction) {
+      switch(actionType) {
         case 'delete':
           const serializedArr = JSON.parse(savedTags);
-          const filteredArr = removeTag({ originalArr: serializedArr, tag });
+          const filteredArr = removeTag({ originalArr: serializedArr, tagId });
           resultArr = [...filteredArr];
           break;
 
@@ -189,11 +185,11 @@ export const resolvers = {
           break;
 
         default:
-          throw new Error('Invalid tagAction');
+          throw new Error('Invalid actionType');
       }
 
       return await prisma.users.update({
-        where: { id: parseInt(id) },
+        where: { id: parseInt(userId) },
         data: {
           tags: resultArr.length ? JSON.stringify(resultArr) : '',
         }

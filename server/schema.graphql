@@ -21,7 +21,7 @@ type Mutation {
 
     createUser(email: String!, password: String!): User
     updateUser(id: ID!, password: String, name: String, totalScore: Int): User
-    updateTags(id: ID!, tag: String, tagAction: TagActionType): User
+    updateTags(userId: ID!, tagId: Int, tag: String, actionType: TagActionType): User
     deleteUser(id: ID!): Boolean
 }
 

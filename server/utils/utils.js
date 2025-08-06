@@ -9,6 +9,6 @@ export const isTagUnique = ({ originalArr, newTag }) => {
   return !!originalArr.find(tag => tag.title === newTag.trim()) !== true;
 }
 
-export const removeTag = ({ originalArr, tag }) => {
-  return originalArr.filter(item => item.title !== tag);
+export const removeTag = ({ originalArr, tagId }) => {
+  return originalArr.filter(item => item.id !== tagId);
 }

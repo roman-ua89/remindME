@@ -3,11 +3,12 @@ import { ICreateNewTagProps, ITag, IUpdateTagsResponse, IUpdateTagsReturnType } 
 import { SERVER_URL } from '@/app/shared/graphql/client';
 
 export const updateTags = async (dataToSave: ICreateNewTagProps): Promise<IUpdateTagsReturnType> => {
-    const { title, userId } = dataToSave;
+    console.log('dataToSave', dataToSave);
+    const { title, userId, actionType, tagId } = dataToSave;
 
     const document = gql`
-        mutation ($id: ID!, $tag: String!, $tagAction: TagActionType!) {
-            updateTags(id: $id, tag: $tag, tagAction: $tagAction) {
+        mutation ($userId: ID!, $tagId: Int, $tag: String, $actionType: TagActionType!) {
+            updateTags(userId: $userId, tagId: $tagId, tag: $tag, actionType: $actionType) {
                 tags
             }
         }
@@ -15,9 +16,10 @@ export const updateTags = async (dataToSave: ICreateNewTagProps): Promise<IUpdat
 
     try {
         const { updateTags } = await request<IUpdateTagsResponse>(SERVER_URL, document, {
-            id: userId,
+            tagId,
+            userId,
             tag: title,
-            tagAction: 'update',
+            actionType,
         })
         const { tags } = updateTags;
         const normalizedData: ITag[] = tags ? JSON.parse(tags) : [];

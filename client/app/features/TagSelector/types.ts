@@ -6,8 +6,10 @@ export interface ITag {
 }
 
 export interface ICreateNewTagProps {
-    title: ITag['title'];
+    tagId?: ITag['id'];
+    title?: ITag['title'];
     userId: IUser['id'];
+    actionType: 'delete' | 'update';
 }
 
 export interface IUpdateTagsResponse {
