@@ -155,6 +155,9 @@ export const resolvers = {
       });
     },
     updateTags: async (_, { id, tag, tagAction }) => {
+      console.log('id', id);
+      console.log('tag', tag)
+      console.log('tagAction', tagAction)
       let resultArr = [];
       const { tags: savedTags } = await prisma.users.findUnique({
         where: { id: parseInt(id) },

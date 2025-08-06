@@ -11,9 +11,12 @@ export interface ICreateNewTagProps {
 }
 
 export interface IUpdateTagsResponse {
-    updatedTags: ITag[];
+    updateTags: {
+        tags: string;
+    };
 }
 
-export interface IUpdateTagsReturnType extends IUpdateTagsResponse {
+export interface IUpdateTagsReturnType {
+    updateTags: ITag[];
     errorMessage: string;
 }

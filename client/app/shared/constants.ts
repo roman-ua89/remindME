@@ -9,3 +9,5 @@ export const DEFAULT_LIST_ITEM: IListNoteItem = { id: 0, title: '', serializedOb
 export const DEFAULT_SINGLE_ITEM: ISingleNoteItem = { id: 0, term: '', explanation: '' }
 export const DEFAULT_LIST_ITEM_TITLE: ListNoteTile = { id: 0, title: '' }
 export const MODAL_WINDOW_CONTAINER_ID = 'modal-window-container';
+
+export const TEMP_USER_ID = 2;

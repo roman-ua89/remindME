@@ -7,12 +7,13 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ITag } from '@/app/features/TagSelector/types';
 import { getUserData } from '@/app/shared/actions';
 import { setNotification, setTags } from '@/store/features/global/globalSlice';
+import { TEMP_USER_ID } from '@/app/shared/constants';
+import { updateTags } from '@/app/features/TagSelector/actions';
 
 export const TagSelector = () => {
     const dispatch = useAppDispatch();
     const [inputValue, setInputValue] = useState('');
     const tags = useAppSelector((state) => state.globalState.tags);
-    const TEMP_USER_ID = 2;
 
     useEffect(() => {
         startTransition(() => {
@@ -24,15 +25,28 @@ export const TagSelector = () => {
                 }
             });
         })
-    }, [])
+    }, []);
 
     const deleteActionHandler = ({ id }: { id: ITag['id'] }) => {
         console.log('delete with id: ', id);
     };
 
-    const addActionHandler = () => {
-        console.log('add title: ', inputValue);
-
+    const updateActionHandler = () => {
+        startTransition(() => {
+            updateTags({ title: inputValue, userId: TEMP_USER_ID }).then(result => {
+                const { errorMessage, updateTags } = result;
+                if (errorMessage) {
+                    dispatch(setNotification({
+                        id: 'cannot-add-tag',
+                        variant: 'error',
+                        message: errorMessage
+                    }))
+                } else if (updateTags.length) {
+                    dispatch(setTags(updateTags));
+                }
+                setInputValue('');
+            })
+        })
     }
 
     return (
@@ -58,7 +72,7 @@ export const TagSelector = () => {
             <div className="mb-4">
                 <div className="flex gap-4">
                     <input type="text" value={inputValue} className="input-style" onChange={(e) => setInputValue(e.target.value)} />
-                    <GreenButton label="Add new tag" disabled={inputValue.length < 3} action={addActionHandler} />
+                    <GreenButton label="Add new tag" disabled={inputValue.length < 3} action={updateActionHandler} />
                 </div>
             </div>
             <Divider />
