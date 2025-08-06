@@ -9,3 +9,11 @@ export interface ICreateNewTagProps {
     title: ITag['title'];
     userId: IUser['id'];
 }
+
+export interface IUpdateTagsResponse {
+    updatedTags: ITag[];
+}
+
+export interface IUpdateTagsReturnType extends IUpdateTagsResponse {
+    errorMessage: string;
+}

@@ -1,6 +1,6 @@
 import { INotification } from '@/app/features/Notifications';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ITag } from '@/app/shared/types/types';
+import { ITag } from '@/app/features/TagSelector/types';
 
 interface IGlobalState {
     notifications: INotification[];
@@ -14,7 +14,7 @@ const initialState: IGlobalState = {
     notifications: [],
     isRegisterFormVisible: false,
     isLoginFormVisible: false,
-    isLoggedIn: true,
+    isLoggedIn: false,
     tags: [],
 };
 

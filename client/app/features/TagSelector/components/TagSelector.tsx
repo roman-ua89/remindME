@@ -1,14 +1,30 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, startTransition } from 'react';
 import { Chip, Stack, Divider } from '@mui/material';
 import { GreenButton } from '@/app/shared/UI/Buttons';
-import { useAppSelector } from '@/store/hooks';
-import { ITag } from '@/app/shared/types/types';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { ITag } from '@/app/features/TagSelector/types';
+import { getUserData } from '@/app/shared/actions';
+import { setNotification, setTags } from '@/store/features/global/globalSlice';
 
 export const TagSelector = () => {
+    const dispatch = useAppDispatch();
     const [inputValue, setInputValue] = useState('');
     const tags = useAppSelector((state) => state.globalState.tags);
+    const TEMP_USER_ID = 2;
+
+    useEffect(() => {
+        startTransition(() => {
+            getUserData(TEMP_USER_ID, ['tags']).then(result => {
+                const { getUserData } = result;
+                if (getUserData?.tags?.length) {
+                    const { tags } = getUserData;
+                    dispatch(setTags(tags));
+                }
+            });
+        })
+    }, [])
 
     const deleteActionHandler = ({ id }: { id: ITag['id'] }) => {
         console.log('delete with id: ', id);

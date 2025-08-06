@@ -10,3 +10,13 @@ export interface IUser {
     totalScore: number;
     tags: ITag[];
 }
+
+export interface IUserDataResponse {
+    getUserData: Omit<Partial<IUser>, 'tags'> & { tags?: string }
+
+}
+
+export interface IUserDataReturnType {
+    getUserData: Partial<IUser>
+    errorMessage: string
+}

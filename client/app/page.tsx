@@ -8,6 +8,7 @@ import { NotificationDecorator } from '@/app/features/Notifications';
 import { MODAL_WINDOW_CONTAINER_ID } from '@/app/shared/constants';
 
 export default function Home() {
+
     return (
         <div className="relative">
             <Header />

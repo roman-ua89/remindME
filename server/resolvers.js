@@ -55,8 +55,8 @@ export const resolvers = {
 
       return { singleNotes, listNotes }
     },
-    getUser: async (_, { id }) => {
-      await prisma.users.findUnique({ // return?
+    getUserData: async (_, { id }) => {
+      return await prisma.users.findUnique({ // return?
         where: { id: Number(id) },
       });
     },
@@ -189,7 +189,7 @@ export const resolvers = {
           throw new Error('Invalid tagAction');
       }
 
-      return prisma.users.update({
+      return await prisma.users.update({
         where: { id: parseInt(id) },
         data: {
           tags: resultArr.length ? JSON.stringify(resultArr) : '',
